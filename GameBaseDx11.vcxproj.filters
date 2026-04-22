@@ -205,6 +205,9 @@
     <ClInclude Include="Source\ModelData.h">
       <Filter>03Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ModelLoader.h">
+      <Filter>03Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

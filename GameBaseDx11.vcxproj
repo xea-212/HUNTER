@@ -178,6 +178,7 @@
     <ClInclude Include="Engine\Texture.h" />
     <ClInclude Include="Engine\Transform.h" />
     <ClInclude Include="Source\ModelData.h" />
+    <ClInclude Include="Source\ModelLoader.h" />
     <ClInclude Include="Source\PlayScene.h" />
     <ClInclude Include="Source\ResultScene.h" />
     <ClInclude Include="Source\TitleScene.h" />
