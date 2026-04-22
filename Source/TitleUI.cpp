@@ -1,5 +1,6 @@
 #include "TitleUI.h"
 #include "../Engine/Model.h"
+#include "../Engine/Direct3D.h"
 
 TitleUI::TitleUI(GameObject* parent)
 	:GameObject(parent, "TitleUI"), hModel_(-1)
@@ -20,7 +21,7 @@ void TitleUI::Update()
 void TitleUI::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_);
+	Model::Draw(hModel_, Direct3D::SHADER_3D);
 }
 
 void TitleUI::Release()

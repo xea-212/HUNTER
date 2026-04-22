@@ -150,6 +150,7 @@
     <ClCompile Include="Engine\Transform.cpp" />
     <ClCompile Include="Source\PlayScene.cpp" />
     <ClCompile Include="Source\ResultScene.cpp" />
+    <ClCompile Include="Source\Sky.cpp" />
     <ClCompile Include="Source\TitleScene.cpp" />
     <ClCompile Include="Source\TitleUI.cpp" />
   </ItemGroup>
@@ -177,10 +178,10 @@
     <ClInclude Include="Engine\Text.h" />
     <ClInclude Include="Engine\Texture.h" />
     <ClInclude Include="Engine\Transform.h" />
-    <ClInclude Include="Source\ModelData.h" />
-    <ClInclude Include="Source\ModelLoader.h" />
     <ClInclude Include="Source\PlayScene.h" />
     <ClInclude Include="Source\ResultScene.h" />
+    <ClInclude Include="Source\Sky.h" />
+    <ClInclude Include="Source\Stage.h" />
     <ClInclude Include="Source\TitleScene.h" />
     <ClInclude Include="Source\TitleUI.h" />
   </ItemGroup>
@@ -200,6 +201,24 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\Simple3D.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Sky.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Water.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
     </FxCompile>
   </ItemGroup>

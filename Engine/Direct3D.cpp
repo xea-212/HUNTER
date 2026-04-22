@@ -357,6 +357,30 @@ namespace Direct3D
 			pDevice_->CreateRasterizerState(&rdc, &shaderBundle[SHADER_BILLBOARD].pRasterizerState);
 		}
 
+		// SKY
+		{
+			ID3DBlob* pCompileVS = NULL;
+			D3DCompileFromFile(L"Shader/Sky.hlsl", nullptr, nullptr, "VS", "vs_5_0", NULL, 0, &pCompileVS, NULL);
+			pDevice_->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &shaderBundle[SHADER_SKY].pVertexShader);
+
+			ID3DBlob* pCompilePS = NULL;
+			D3DCompileFromFile(L"Shader/Sky.hlsl", nullptr, nullptr, "PS", "ps_5_0", NULL, 0, &pCompilePS, NULL);
+			pDevice_->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &shaderBundle[SHADER_SKY].pPixelShader);
+
+			D3D11_INPUT_ELEMENT_DESC layout[] = {
+				{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+			};
+			pDevice_->CreateInputLayout(layout, 1, pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &shaderBundle[SHADER_SKY].pVertexLayout);
+
+			pCompileVS->Release();
+			pCompilePS->Release();
+
+			// ƒJƒŠƒ“ƒO‚È‚µ
+			D3D11_RASTERIZER_DESC rdc = {};
+			rdc.CullMode = D3D11_CULL_NONE;
+			rdc.FillMode = D3D11_FILL_SOLID;
+			pDevice_->CreateRasterizerState(&rdc, &shaderBundle[SHADER_SKY].pRasterizerState);
+		}
 	}
 
 

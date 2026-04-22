@@ -119,6 +119,9 @@
     <ClCompile Include="Source\TitleUI.cpp">
       <Filter>03Scene\Title</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Sky.cpp">
+      <Filter>03Scene\Play</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -202,11 +205,11 @@
     <ClInclude Include="Source\TitleUI.h">
       <Filter>03Scene\Title</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ModelData.h">
-      <Filter>03Scene</Filter>
+    <ClInclude Include="Source\Stage.h">
+      <Filter>03Scene\Play</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ModelLoader.h">
-      <Filter>03Scene</Filter>
+    <ClInclude Include="Source\Sky.h">
+      <Filter>03Scene\Play</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +223,12 @@
       <Filter>02Shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\BillBoard.hlsl">
+      <Filter>02Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Sky.hlsl">
+      <Filter>02Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Water.hlsl">
       <Filter>02Shader</Filter>
     </FxCompile>
   </ItemGroup>

@@ -28,7 +28,16 @@ namespace Direct3D
 
 
 	//■シェーダー関連で必要なセット
-	enum SHADER_TYPE{SHADER_3D, SHADER_2D, SHADER_UNLIT, SHADER_BILLBOARD, SHADER_MAX};	//3タイプ（3D用、2D用、当たり判定枠表示用）
+	enum SHADER_TYPE
+	{
+		SHADER_3D,
+		SHADER_2D,
+		SHADER_UNLIT,
+		SHADER_BILLBOARD,
+		SHADER_SKY,
+		SHADER_MAX
+	};
+
 	struct SHADER_BUNDLE
 	{
 		//【頂点入力レイアウト情報】
@@ -52,7 +61,9 @@ namespace Direct3D
 	//■ブレンドモード
 	enum BLEND_MODE
 	{
-		BLEND_DEFAULT, BLEND_ADD, BLEND_MAX
+		BLEND_DEFAULT,
+		BLEND_ADD,
+		BLEND_MAX
 	};
 
 

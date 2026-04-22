@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Model.h"
 #include "Transform.h"
+#include "Direct3D.h"
 
 //コンストラクタ
 Collider::Collider():
@@ -89,9 +90,10 @@ bool Collider::IsHitCircleVsCircle(SphereCollider* circleA, SphereCollider* circ
 void Collider::Draw(XMFLOAT3 position)
 {
 	Transform transform;
+	Direct3D::SHADER_TYPE shaderType = Direct3D::SHADER_3D;
 	transform.position_ = XMFLOAT3(position.x + center_.x, position.y + center_.y, position.z + center_.z);
 	transform.scale_ = size_;
 	transform.Calclation();
 	Model::SetTransform(hDebugModel_, transform);
-	Model::Draw(hDebugModel_);
+	Model::Draw(hDebugModel_, shaderType);
 }

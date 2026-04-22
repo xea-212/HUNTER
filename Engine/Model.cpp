@@ -1,5 +1,6 @@
 #include "Global.h"
 #include "Model.h"
+#include "Direct3D.h"
 
 //3Dモデル（FBXファイル）を管理する
 namespace Model
@@ -16,59 +17,49 @@ namespace Model
 	//モデルをロード
 	int Load(std::string fileName)
 	{
-			ModelData* pData = new ModelData;
-
-
-			//開いたファイル一覧から同じファイル名のものが無いか探す
-			bool isExist = false;
-			for (int i = 0; i < _datas.size(); i++)
+		// すでに開いているかチェック
+		for (int i = 0; i < _datas.size(); i++)
+		{
+			if (_datas[i] != nullptr && _datas[i]->fileName == fileName)
 			{
-				//すでに開いている場合
-				if (_datas[i] != nullptr && _datas[i]->fileName == fileName)
-				{
-					pData->pFbx = _datas[i]->pFbx;
-					isExist = true;
-					break;
-				}
+				return i; // ← ここが重要
 			}
+		}
 
-			//新たにファイルを開く
-			if (isExist == false)
+		ModelData* pData = new ModelData;
+
+		pData->pFbx = new Fbx;
+		if (FAILED(pData->pFbx->Load(fileName)))
+		{
+			SAFE_DELETE(pData->pFbx);
+			SAFE_DELETE(pData);
+			return -1;
+		}
+
+		pData->fileName = fileName;
+
+		// 空きスロット探す
+		for (int i = 0; i < _datas.size(); i++)
+		{
+			if (_datas[i] == nullptr)
 			{
-				pData->pFbx = new Fbx;
-				if (FAILED(pData->pFbx->Load(fileName)))
-				{
-					//開けなかった
-					SAFE_DELETE(pData->pFbx);
-					SAFE_DELETE(pData);
-					return -1;
-				}
-
-				//無事開けた
-				pData->fileName = fileName;
+				_datas[i] = pData;
+				return i;
 			}
+		}
 
-
-			//使ってない番号が無いか探す
-			for (int i = 0; i < _datas.size(); i++)
-			{
-				if (_datas[i] == nullptr)
-				{
-					_datas[i] = pData;
-					return i;
-				}
-			}
-
-			//新たに追加
-			_datas.push_back(pData);
-			return (int)_datas.size() - 1;
+		// 追加
+		_datas.push_back(pData);
+		return (int)_datas.size() - 1;
 	}
 
 
 
 	//描画
-	void Draw(int handle)
+	void Draw(int handle, Direct3D::SHADER_TYPE shader)
 	{
+		Direct3D::SetShader(shader);
+
 		if (handle < 0 || handle >= _datas.size() || _datas[handle] == nullptr)
 		{
 			return;
