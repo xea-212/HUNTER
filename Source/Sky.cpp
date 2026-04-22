@@ -7,7 +7,7 @@ Sky::Sky(GameObject* parent)
 
 void Sky::Initialize()
 {
-	hModel_ = Model::Load("Model/sky.fbx");
+	hModel_ = Model::Load("Model/Sky.fbx");
 }
 
 void Sky::Update()
