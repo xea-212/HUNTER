@@ -3,6 +3,7 @@
 #include "../Engine/Input.h"
 #include "Sky.h"
 #include "Stage.h"
+#include "Player.h"
 
 PlayScene::PlayScene(GameObject* parent)
 {
@@ -11,11 +12,13 @@ PlayScene::PlayScene(GameObject* parent)
 void PlayScene::Initialize()
 {
 	Instantiate<Sky>(this);
+	Instantiate<Stage>(this);
 }
 
 void PlayScene::Update()
 {
-	if (Input::IsKeyDown(DIK_RETURN))
+	Player* player = (Player*)FindChildObject("Player");
+	if (player->GetHP() <= 0)
 	{
 		SceneManager* sceneManager = (SceneManager*)GetParent();
 		sceneManager->ChangeScene(SCENE_ID::SCENE_ID_RESULT);

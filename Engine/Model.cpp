@@ -56,9 +56,8 @@ namespace Model
 
 
 	//•`‰æ
-	void Draw(int handle, Direct3D::SHADER_TYPE shader)
+	void Draw(int handle)
 	{
-		Direct3D::SetShader(shader);
 
 		if (handle < 0 || handle >= _datas.size() || _datas[handle] == nullptr)
 		{

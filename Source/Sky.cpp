@@ -2,6 +2,7 @@
 #include "../Engine/Direct3D.h"
 
 Sky::Sky(GameObject* parent)
+	:GameObject(parent, "Sky"), hModel_(-1)
 {
 }
 
@@ -16,8 +17,10 @@ void Sky::Update()
 
 void Sky::Draw()
 {
+	Direct3D::SetShader(Direct3D::SHADER_SKY);
+
 	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_, Direct3D::SHADER_SKY);
+	Model::Draw(hModel_);
 }
 
 void Sky::Release()

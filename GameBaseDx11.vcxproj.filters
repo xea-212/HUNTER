@@ -122,6 +122,15 @@
     <ClCompile Include="Source\Sky.cpp">
       <Filter>03Scene\Play</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Stage.cpp">
+      <Filter>03Scene\Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy.cpp">
+      <Filter>03Scene\Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player.cpp">
+      <Filter>03Scene\Play</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -209,6 +218,12 @@
       <Filter>03Scene\Play</Filter>
     </ClInclude>
     <ClInclude Include="Source\Sky.h">
+      <Filter>03Scene\Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Player.h">
+      <Filter>03Scene\Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy.h">
       <Filter>03Scene\Play</Filter>
     </ClInclude>
   </ItemGroup>

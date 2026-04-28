@@ -60,7 +60,7 @@ namespace Model
 	//描画
 	//引数：handle	描画したいモデルの番号
 	//引数：matrix	ワールド行列
-	void Draw(int handle, Direct3D::SHADER_TYPE shader);
+	void Draw(int handle);
 
 	//任意のモデルを開放
 	//引数：handle	開放したいモデルの番号
