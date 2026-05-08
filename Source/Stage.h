@@ -3,6 +3,28 @@
 #include "../Engine/Model.h"
 #include "../Engine/CsvReader.h"
 
+struct StageData
+{
+	int modelName;
+	XMFLOAT3 position;
+	XMFLOAT3 rotate;
+	XMFLOAT3 scale;
+};
+
+enum STAGE_DATA
+{
+	MODEL_NAME = 1,
+	POSITION_X,
+	POSITION_Y,
+	POSITION_Z,
+	ROTATE_X,
+	ROTATE_Y,
+	ROTATE_Z,
+	SCALE_X,
+	SCALE_Y,
+	SCALE_Z
+};
+
 class Stage : public GameObject
 {
 public:
@@ -17,6 +39,6 @@ public:
 	//開放
 	void Release() override;
 private:
-	int hModel_;
 	CsvReader* csv;
+	std::vector<StageData> stageData_;
 };
