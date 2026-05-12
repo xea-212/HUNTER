@@ -122,13 +122,16 @@
     <ClCompile Include="Source\Sky.cpp">
       <Filter>03Scene\Play</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Stage.cpp">
+    <ClCompile Include="Source\StageManager.cpp">
       <Filter>03Scene\Play</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy.cpp">
       <Filter>03Scene\Play</Filter>
     </ClCompile>
     <ClCompile Include="Source\Player.cpp">
+      <Filter>03Scene\Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\StageObject.cpp">
       <Filter>03Scene\Play</Filter>
     </ClCompile>
   </ItemGroup>
@@ -214,7 +217,7 @@
     <ClInclude Include="Source\TitleUI.h">
       <Filter>03Scene\Title</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Stage.h">
+    <ClInclude Include="Source\StageManager.h">
       <Filter>03Scene\Play</Filter>
     </ClInclude>
     <ClInclude Include="Source\Sky.h">
@@ -224,6 +227,9 @@
       <Filter>03Scene\Play</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy.h">
+      <Filter>03Scene\Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StageObject.h">
       <Filter>03Scene\Play</Filter>
     </ClInclude>
   </ItemGroup>

@@ -153,7 +153,8 @@
     <ClCompile Include="Source\PlayScene.cpp" />
     <ClCompile Include="Source\ResultScene.cpp" />
     <ClCompile Include="Source\Sky.cpp" />
-    <ClCompile Include="Source\Stage.cpp" />
+    <ClCompile Include="Source\StageManager.cpp" />
+    <ClCompile Include="Source\StageObject.cpp" />
     <ClCompile Include="Source\TitleScene.cpp" />
     <ClCompile Include="Source\TitleUI.cpp" />
   </ItemGroup>
@@ -186,7 +187,8 @@
     <ClInclude Include="Source\PlayScene.h" />
     <ClInclude Include="Source\ResultScene.h" />
     <ClInclude Include="Source\Sky.h" />
-    <ClInclude Include="Source\Stage.h" />
+    <ClInclude Include="Source\StageManager.h" />
+    <ClInclude Include="Source\StageObject.h" />
     <ClInclude Include="Source\TitleScene.h" />
     <ClInclude Include="Source\TitleUI.h" />
   </ItemGroup>
