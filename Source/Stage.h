@@ -5,7 +5,9 @@
 
 struct StageData
 {
-	int modelName;
+	std::string modelName;
+	int hModel_;
+
 	XMFLOAT3 position;
 	XMFLOAT3 rotate;
 	XMFLOAT3 scale;
@@ -39,6 +41,7 @@ public:
 	//開放
 	void Release() override;
 private:
-	CsvReader* csv;
+	int hModel_;
+	CsvReader csv;
 	std::vector<StageData> stageData_;
 };
