@@ -3,6 +3,7 @@
 #include "../Engine/Input.h"
 #include "Sky.h"
 #include "Player.h"
+#include "StageObject.h"
 
 PlayScene::PlayScene(GameObject* parent)
 {
@@ -10,7 +11,9 @@ PlayScene::PlayScene(GameObject* parent)
 
 void PlayScene::Initialize()
 {
-	Instantiate<Sky>(this);
+	Instantiate<Player>(this);
+	//Instantiate<Sky>(this);
+	Instantiate<StageObject>(this);
 }
 
 void PlayScene::Update()

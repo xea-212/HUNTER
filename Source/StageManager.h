@@ -28,10 +28,9 @@ enum STAGE_DATA
 class StageManager
 {
 public:
-	StageManager();
+	StageManager(std::vector<StageData>& stageData);
 	~StageManager();
-	void Initialize();
-private:
 	void LoadStageData(std::string fileName);
+private:
 	std::vector<StageData>& stageData_;
 };

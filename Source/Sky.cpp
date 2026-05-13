@@ -8,7 +8,7 @@ Sky::Sky(GameObject* parent)
 
 void Sky::Initialize()
 {
-	hModel_ = Model::Load("Model/Sky.fbx");
+	hModel_ = Model::Load("Model/Ground.fbx");
 }
 
 void Sky::Update()
@@ -17,8 +17,6 @@ void Sky::Update()
 
 void Sky::Draw()
 {
-	Direct3D::SetShader(Direct3D::SHADER_SKY);
-
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
 }

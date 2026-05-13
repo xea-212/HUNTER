@@ -1,17 +1,13 @@
 #include "StageManager.h"
 #include "../Engine/CsvReader.h"
 
-StageManager::StageManager()
+StageManager::StageManager(std::vector<StageData>& stageData)
+	: stageData_(stageData)
 {
 }
 
 StageManager::~StageManager()
 {
-}
-
-void StageManager::Initialize()
-{
-	
 }
 
 void StageManager::LoadStageData(std::string fileName)

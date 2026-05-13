@@ -34,4 +34,6 @@ private:
 		int hp_;
 		int power_;
 	};
+	bool moveWork;
+	bool moveRotate;
 };
