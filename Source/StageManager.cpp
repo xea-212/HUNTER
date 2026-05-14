@@ -1,8 +1,10 @@
 #include "StageManager.h"
 #include "../Engine/CsvReader.h"
+#include "StageObject.h"
 
-StageManager::StageManager(std::vector<StageData>& stageData)
-	: stageData_(stageData)
+
+StageManager::StageManager(GameObject* parent)
+	: GameObject(parent, "StageManager"), stageData_(*new std::vector<StageData>())
 {
 }
 
@@ -10,9 +12,28 @@ StageManager::~StageManager()
 {
 }
 
+void StageManager::Initialize()
+{
+	LoadStageData("StageObject");
+	CreateStageObject();
+}
+
+void StageManager::Update()
+{}
+
+void StageManager::Draw()
+{}
+
+void StageManager::Release()
+{}
+
 void StageManager::LoadStageData(std::string fileName)
 {
-	std::string path = "Assets/Data/";
+	// データの削除
+	stageData_.clear();
+
+	// CSVファイルを読み込む
+	std::string path = "Data/";
 	CsvReader* csv = new CsvReader(path + fileName + ".csv");
 	for (int line = 0; line < csv->GetLines(); line++) {
 		StageData data;
@@ -29,4 +50,15 @@ void StageManager::LoadStageData(std::string fileName)
 		stageData_.push_back(data);
 	}
 	delete csv;
+}
+
+void StageManager::CreateStageObject()
+{
+	for (auto& data : stageData_) {
+		// ステージオブジェクトを生成する
+		StageObject* obj = new StageObject(this);
+		obj->SetPosition(data.position);
+		obj->SetRotate(data.rotate);
+		obj->SetScale(data.scale);
+	}
 }

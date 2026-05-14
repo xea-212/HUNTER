@@ -10,18 +10,13 @@ StageObject::StageObject(GameObject* parent)
 
 void StageObject::Initialize()
 {
-	if (stageManager_ == nullptr){ 
-		stageManager_ = new StageManager(stageData_);
-	}
-	stageManager_->LoadStageData("StageObject");
+	SetStageData(StageData());
 }
 
 void StageObject::Draw()
 {
-	if (hModel_ != -1) {
-		Model::SetTransform(hModel_, transform_);
-		Model::Draw(hModel_);
-	}
+	Model::SetTransform(hModel_, transform_);
+	Model::Draw(hModel_);
 }
 
 void StageObject::Update()

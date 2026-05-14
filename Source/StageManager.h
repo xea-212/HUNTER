@@ -2,6 +2,7 @@
 #include "../Engine/GameObject.h"
 #include <vector>
 
+// ステージのデータ構造
 struct StageData
 {
 	std::string modelName;
@@ -11,6 +12,7 @@ struct StageData
 	XMFLOAT3 scale;
 };
 
+// CSVファイルの列番号
 enum STAGE_DATA
 {
 	STAGE_DATA_MODELNAME = 0,
@@ -25,12 +27,19 @@ enum STAGE_DATA
 	STAGE_DATA_SCAZ,
 };
 
-class StageManager
+// ステージの管理を行うクラス
+class StageManager : public GameObject
 {
 public:
-	StageManager(std::vector<StageData>& stageData);
+	StageManager(GameObject* parent);
 	~StageManager();
-	void LoadStageData(std::string fileName);
+	void Initialize() override;
+	void Update() override;
+	void Draw() override;
+	void Release() override;
+
+	void LoadStageData(std::string fileName); // CSVファイルからステージデータを読み込む
+	void CreateStageObject(); // ステージオブジェクトを生成する
 private:
 	std::vector<StageData>& stageData_;
 };

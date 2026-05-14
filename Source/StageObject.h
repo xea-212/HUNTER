@@ -19,6 +19,4 @@ public:
 	void SetStageData(const StageData& data);
 private:
 	int hModel_;
-	std::vector<StageData> stageData_;
-	StageManager* stageManager_;
 };
