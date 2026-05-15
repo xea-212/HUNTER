@@ -23,6 +23,15 @@ public:
 	//開放
 	void Release() override;
 
+	//待機
+	void Idle();
+	//歩く
+	void Walk();
+	//ジャンプ
+	void Jump();
+	//攻撃
+	void Attack();
+
 	int GetHP() { return hp_; }
 	int GetPower() { return power_; }
 	int Damage(int damage) { hp_ -= damage; return hp_; }
@@ -36,4 +45,5 @@ private:
 	};
 	bool moveWork;
 	bool moveRotate;
+	XMVECTOR vPos;
 };

@@ -41,5 +41,5 @@ public:
 	void LoadStageData(std::string fileName); // CSVファイルからステージデータを読み込む
 	void CreateStageObject(); // ステージオブジェクトを生成する
 private:
-	std::vector<StageData>& stageData_;
+	std::vector<StageData> stageData_;
 };

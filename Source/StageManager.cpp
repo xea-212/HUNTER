@@ -4,7 +4,7 @@
 
 
 StageManager::StageManager(GameObject* parent)
-	: GameObject(parent, "StageManager"), stageData_(*new std::vector<StageData>())
+	: GameObject(parent, "StageManager"), stageData_{}
 {
 }
 
@@ -56,9 +56,7 @@ void StageManager::CreateStageObject()
 {
 	for (auto& data : stageData_) {
 		// ステージオブジェクトを生成する
-		StageObject* obj = new StageObject(this);
-		obj->SetPosition(data.position);
-		obj->SetRotate(data.rotate);
-		obj->SetScale(data.scale);
+		StageObject* obj = Instantiate<StageObject>(GetParent());
+		obj->SetStageData(data);
 	}
 }

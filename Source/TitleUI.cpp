@@ -10,7 +10,7 @@ TitleUI::TitleUI(GameObject* parent)
 void TitleUI::Initialize()
 {
 	//モデルのロード
-	hModel_ = Model::Load("Model/Ground.fbx");
+	hModel_ = Model::Load("Model/Stage/Ground.fbx");
 	assert(hModel_ >= 0);
 	transform_.position_ = { 0.0f, 0.0f, 0.0f };
 }

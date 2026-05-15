@@ -9,7 +9,10 @@ Enemy::Enemy(GameObject* parent)
 
 void Enemy::Initialize()
 {
-	hModel_ = Model::Load("Model/Enemy.fbx");
+	hModel_ = Model::Load("Model/Character/Enemy.fbx");
+	transform_.position_ = { 0.0f, 0.0f, 20.0f };
+	transform_.rotate_ = { 0.0f, 180.0f, 0.0f };
+	transform_.scale_ = { 0.1f, 0.1f, 0.1f };
 	state = ENEMY_STATE_IDLE;
 }
 
@@ -29,7 +32,6 @@ void Enemy::Update()
 
 void Enemy::Draw()
 {
-	Direct3D::SetShader(Direct3D::SHADER_3D);
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
 }

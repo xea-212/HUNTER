@@ -5,19 +5,19 @@
 #include "../Engine/Camera.h"
 
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), hModel_(-1), moveWork(false), moveRotate(false), hp_(100), power_(10)
+	:GameObject(parent, "Player"), hModel_(-1), moveWork(false), moveRotate(false), hp_(100), power_(10), vPos{}
 {
 }
 
 void Player::Initialize()
 {
-	hModel_ = Model::Load("Model/Player.fbx");
+	hModel_ = Model::Load("Model/Character/Player.fbx");
 	state = PLAYER_STATE_IDLE;
 }
 
 void Player::Update()
 {
-	XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
+	vPos = XMLoadFloat3(&transform_.position_);
 
 	XMMATRIX mRotate = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x)) *
 		               XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
@@ -34,41 +34,16 @@ void Player::Update()
 	XMVECTOR mForward = {0,0,0,0};
 	switch(state){
 		case PLAYER_STATE_IDLE:
-			if (moveRotate) {
-				if (Input::IsKey(DIK_RIGHT)) {
-					transform_.rotate_.y += 1.0f;
-				}
-				else if (Input::IsKey(DIK_LEFT)) {
-					transform_.rotate_.y -= 1.0f;
-				}
-				moveRotate = false;
-			}
-			if (moveWork){
-				state = PLAYER_STATE_WALK;
-			}
+			Idle();
 			break;
 		case PLAYER_STATE_WALK:
-			if (!moveWork) {
-				state = PLAYER_STATE_IDLE;
-			}
-
-			if (Input::IsKey(DIK_W)) {
-				vPos += XMVectorSet(0, 0, 0.001f, 0);
-			}
-			if (Input::IsKey(DIK_S)) {
-				vPos += XMVectorSet(0, 0, -0.001f, 0);
-			}
-			if (Input::IsKey(DIK_A)) {
-				vPos += XMVectorSet(-0.001f, 0, 0, 0);
-			}
-			if (Input::IsKey(DIK_D)) {
-				vPos += XMVectorSet(0.001f, 0, 0, 0);
-			}
-			
+			Walk();
 			break;
 		case PLAYER_STATE_JUMP:
+			Jump();
 			break;
 		case PLAYER_STATE_ATTACK:
+			Attack();
 			break;
 	}
 
@@ -98,5 +73,49 @@ void Player::Draw()
 }
 
 void Player::Release()
+{
+}
+
+void Player::Idle()
+{
+	if (moveRotate) {
+		if (Input::IsKey(DIK_RIGHT)) {
+			transform_.rotate_.y += 1.0f;
+		}
+		else if (Input::IsKey(DIK_LEFT)) {
+			transform_.rotate_.y -= 1.0f;
+		}
+		moveRotate = false;
+	}
+	if (moveWork) {
+		state = PLAYER_STATE_WALK;
+	}
+}
+
+void Player::Walk()
+{
+	if(!moveWork) {
+		state = PLAYER_STATE_IDLE;
+	}
+
+	if (Input::IsKey(DIK_W)) {
+		vPos += XMVectorSet(0, 0, 0.001f, 0);
+	}
+	if (Input::IsKey(DIK_S)) {
+		vPos += XMVectorSet(0, 0, -0.001f, 0);
+	}
+	if (Input::IsKey(DIK_A)) {
+		vPos += XMVectorSet(-0.001f, 0, 0, 0);
+	}
+	if (Input::IsKey(DIK_D)) {
+		vPos += XMVectorSet(0.001f, 0, 0, 0);
+	}
+}
+
+void Player::Jump()
+{
+}
+
+void Player::Attack()
 {
 }

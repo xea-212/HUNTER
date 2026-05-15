@@ -30,7 +30,7 @@ void StageObject::Release()
 
 void StageObject::SetStageData(const StageData& data)
 {
-	hModel_ = Model::Load("Model/" + data.modelName + ".fbx");
+	hModel_ = Model::Load("Model/Stage/" + data.modelName + ".fbx");
 
 	transform_.position_ = data.position;
 	transform_.rotate_ = data.rotate;

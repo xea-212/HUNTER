@@ -8,7 +8,7 @@ Sky::Sky(GameObject* parent)
 
 void Sky::Initialize()
 {
-	hModel_ = Model::Load("Model/Ground.fbx");
+	hModel_ = Model::Load("Model/Stage/Sky.fbx");
 }
 
 void Sky::Update()
