@@ -3,9 +3,11 @@
 #include "../Engine/Direct3D.h"
 #include "../Engine/Input.h"
 #include "../Engine/Camera.h"
+#include "StageObject.h"
 
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), hModel_(-1), moveWork(false), moveRotate(false), hp_(100), power_(10), vPos{}
+	:GameObject(parent, "Player"), hModel_(-1), moveWork(false), moveRotate(false), hp_(100), power_(10), vPos{},
+	moveJump(false), isGround(false), moveAttack(false)
 {
 }
 
@@ -20,15 +22,32 @@ void Player::Update()
 	vPos = XMLoadFloat3(&transform_.position_);
 
 	XMMATRIX mRotate = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x)) *
-		               XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+		XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
 
 	moveWork = false;
 
+	//	移動
 	if (Input::IsKey(DIK_W) || Input::IsKey(DIK_S) || Input::IsKey(DIK_A) || Input::IsKey(DIK_D)){
 		moveWork = true;
 	}
+	// 回転
 	if(Input::IsKey(DIK_RIGHT) || Input::IsKey(DIK_LEFT)){
 		moveRotate = true;
+	}
+	// ジャンプ
+	if (Input::IsKeyDown(DIK_SPACE)) {
+		moveJump = true;
+	}
+
+	//回転
+	if (moveRotate) {
+		if (Input::IsKey(DIK_RIGHT)) {
+			transform_.rotate_.y += 1.0f;
+		}
+		else if (Input::IsKey(DIK_LEFT)) {
+			transform_.rotate_.y -= 1.0f;
+		}
+		moveRotate = false;
 	}
 
 	XMVECTOR mForward = {0,0,0,0};
@@ -47,10 +66,23 @@ void Player::Update()
 			break;
 	}
 
-	XMVECTOR rotateMove = XMVector3TransformCoord(vPos, mRotate);
-	vPos += rotateMove;
 	XMStoreFloat3(&transform_.position_, vPos);
 
+	// レイキャスト
+	StageObject* sObj = (StageObject*)GetParent()->FindChildObject("StageObject");
+	int hGoundModel = sObj->getModelhundle();
+
+	RayCastData data;
+	data.start = {0, transform_.position_.y + 5.0f, 0};
+
+	data.dir = { 0, -1, 0 };
+	Model::RayCast(hGoundModel, &data);
+
+	if(data.hit) {
+		transform_.position_.y = data.start.y - data.dist;
+	}
+
+	// カメラの位置と向きの更新
 	XMVECTOR vCam = {0,5,-20,0};
 	vCam = XMVector3TransformCoord(vCam, mRotate);
 	
@@ -78,17 +110,12 @@ void Player::Release()
 
 void Player::Idle()
 {
-	if (moveRotate) {
-		if (Input::IsKey(DIK_RIGHT)) {
-			transform_.rotate_.y += 1.0f;
-		}
-		else if (Input::IsKey(DIK_LEFT)) {
-			transform_.rotate_.y -= 1.0f;
-		}
-		moveRotate = false;
-	}
+	
 	if (moveWork) {
 		state = PLAYER_STATE_WALK;
+	}
+	if (moveJump) {
+		state = PLAYER_STATE_JUMP;
 	}
 }
 
@@ -98,22 +125,33 @@ void Player::Walk()
 		state = PLAYER_STATE_IDLE;
 	}
 
+	XMVECTOR move = XMVectorZero();
+
 	if (Input::IsKey(DIK_W)) {
-		vPos += XMVectorSet(0, 0, 0.001f, 0);
+		move += XMVectorSet(0, 0, 0.1f, 0);
 	}
 	if (Input::IsKey(DIK_S)) {
-		vPos += XMVectorSet(0, 0, -0.001f, 0);
+		move += XMVectorSet(0, 0, -0.1f, 0);
 	}
 	if (Input::IsKey(DIK_A)) {
-		vPos += XMVectorSet(-0.001f, 0, 0, 0);
+		move += XMVectorSet(-0.1f, 0, 0, 0);
 	}
 	if (Input::IsKey(DIK_D)) {
-		vPos += XMVectorSet(0.001f, 0, 0, 0);
+		move += XMVectorSet(0.1f, 0, 0, 0);
 	}
+
+	XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+
+	move = XMVector3TransformCoord(move, mRotate);
+
+	vPos += move;
 }
 
 void Player::Jump()
 {
+	if (isGround && !moveJump) {
+		state = PLAYER_STATE_IDLE;
+	}
 }
 
 void Player::Attack()

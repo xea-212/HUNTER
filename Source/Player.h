@@ -43,7 +43,10 @@ private:
 		int hp_;
 		int power_;
 	};
-	bool moveWork;
-	bool moveRotate;
+	bool moveWork; // 移動しているかどうか
+	bool moveRotate; // 回転しているかどうか
+	bool moveJump; // ジャンプしているかどうか
+	bool isGround; // 床についているかどうか
+	bool moveAttack; // 攻撃しているかどうか
 	XMVECTOR vPos;
 };

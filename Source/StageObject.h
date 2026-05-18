@@ -17,6 +17,7 @@ public:
 	void Update() override;
 	void Release() override;
 	void SetStageData(const StageData& data);
+	int getModelhundle() { return hModel_; }
 private:
 	int hModel_;
 };
