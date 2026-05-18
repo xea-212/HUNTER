@@ -32,17 +32,23 @@ public:
 	//攻撃
 	void Attack();
 
-	int GetHP() { return hp_; }
-	int GetPower() { return power_; }
-	int Damage(int damage) { hp_ -= damage; return hp_; }
-	int Heal(int heal) { hp_ += heal; return hp_; }
+	int GetHP() { return param_.hp_; }
+	int GetPower() { return param_.power_; }
+	int Damage(int damage) { param_.hp_ -= damage; return param_.hp_; }
+	int Heal(int heal) { param_.hp_ += heal; return param_.hp_; }
 private:
 	int hModel_;
 	PlayerState state;
-	struct {
+	struct PlayerParam{
+		float moveSpeed;
+		float jumpPower;
+		float gravity;
+
 		int hp_;
 		int power_;
 	};
+	PlayerParam param_;
+
 	bool moveWork; // 移動しているかどうか
 
 	bool moveRotate; // 回転しているかどうか

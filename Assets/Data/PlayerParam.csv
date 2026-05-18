@@ -1,0 +1,5 @@
+Player,
+hp,100
+power,10
+velocity,0.2
+gravity,-0.03

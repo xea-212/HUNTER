@@ -6,7 +6,7 @@
 #include "StageObject.h"
 
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), hModel_(-1), moveWork(false), moveRotate(false), hp_(100), power_(10), vPos{},
+	:GameObject(parent, "Player"), hModel_(-1), moveWork(false), moveRotate(false), vPos{},
 	moveJump(false), isGround(false), moveAttack(false), gravity(0.0f), velocity(XMVectorZero())
 {
 }
@@ -15,6 +15,8 @@ void Player::Initialize()
 {
 	hModel_ = Model::Load("Model/Character/Player.fbx");
 	state = PLAYER_STATE_IDLE;
+
+	param_.hp_ = 100;
 }
 
 void Player::Update()
@@ -178,7 +180,6 @@ void Player::Jump()
 	vPos += move;
 
 	// ジャンプ
-	vPos += XMVectorSet(0, velocity, 0, 0);
 }
 
 void Player::Attack()
