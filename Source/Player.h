@@ -44,9 +44,14 @@ private:
 		int power_;
 	};
 	bool moveWork; // 移動しているかどうか
+
 	bool moveRotate; // 回転しているかどうか
+
 	bool moveJump; // ジャンプしているかどうか
 	bool isGround; // 床についているかどうか
+	float gravity; // 重力
+	XMVECTOR velocity; // ジャンプの速度
+
 	bool moveAttack; // 攻撃しているかどうか
 	XMVECTOR vPos;
 };

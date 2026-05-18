@@ -7,7 +7,7 @@
 
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), hModel_(-1), moveWork(false), moveRotate(false), hp_(100), power_(10), vPos{},
-	moveJump(false), isGround(false), moveAttack(false)
+	moveJump(false), isGround(false), moveAttack(false), gravity(0.0f), velocity(XMVectorZero())
 {
 }
 
@@ -37,6 +37,8 @@ void Player::Update()
 	// ジャンプ
 	if (Input::IsKeyDown(DIK_SPACE)) {
 		moveJump = true;
+		isGround = false;
+
 	}
 
 	//回転
@@ -50,6 +52,7 @@ void Player::Update()
 		moveRotate = false;
 	}
 
+	// 状態の更新
 	XMVECTOR mForward = {0,0,0,0};
 	switch(state){
 		case PLAYER_STATE_IDLE:
@@ -152,6 +155,30 @@ void Player::Jump()
 	if (isGround && !moveJump) {
 		state = PLAYER_STATE_IDLE;
 	}
+
+	XMVECTOR move = XMVectorZero();
+
+	if (Input::IsKey(DIK_W)) {
+		move += XMVectorSet(0, 0, 0.1f, 0);
+	}
+	if (Input::IsKey(DIK_S)) {
+		move += XMVectorSet(0, 0, -0.1f, 0);
+	}
+	if (Input::IsKey(DIK_A)) {
+		move += XMVectorSet(-0.1f, 0, 0, 0);
+	}
+	if (Input::IsKey(DIK_D)) {
+		move += XMVectorSet(0.1f, 0, 0, 0);
+	}
+
+	XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+
+	move = XMVector3TransformCoord(move, mRotate);
+
+	vPos += move;
+
+	// ジャンプ
+	vPos += XMVectorSet(0, velocity, 0, 0);
 }
 
 void Player::Attack()
