@@ -4,19 +4,19 @@
 #include "../Engine/Input.h"
 #include "../Engine/Camera.h"
 #include "StageObject.h"
+#include "../Engine/CsvReader.h"
 
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), hModel_(-1), moveWork(false), moveRotate(false), vPos{},
-	moveJump(false), isGround(false), moveAttack(false), gravity(0.0f), velocity(XMVectorZero())
+	:GameObject(parent, "Player"), hModel_(-1)
 {
 }
 
 void Player::Initialize()
 {
 	hModel_ = Model::Load("Model/Character/Player.fbx");
-	state = PLAYER_STATE_IDLE;
+	state = PLAYER_STATE_FREE;
 
-	param_.hp_ = 100;
+	SetParameter("PlayerParam");
 }
 
 void Player::Update()
@@ -26,47 +26,15 @@ void Player::Update()
 	XMMATRIX mRotate = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x)) *
 		XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
 
-	moveWork = false;
-
-	//	移動
-	if (Input::IsKey(DIK_W) || Input::IsKey(DIK_S) || Input::IsKey(DIK_A) || Input::IsKey(DIK_D)){
-		moveWork = true;
-	}
-	// 回転
-	if(Input::IsKey(DIK_RIGHT) || Input::IsKey(DIK_LEFT)){
-		moveRotate = true;
-	}
-	// ジャンプ
-	if (Input::IsKeyDown(DIK_SPACE)) {
-		moveJump = true;
-		isGround = false;
-
-	}
-
-	//回転
-	if (moveRotate) {
-		if (Input::IsKey(DIK_RIGHT)) {
-			transform_.rotate_.y += 1.0f;
-		}
-		else if (Input::IsKey(DIK_LEFT)) {
-			transform_.rotate_.y -= 1.0f;
-		}
-		moveRotate = false;
-	}
-
-	// 状態の更新
 	XMVECTOR mForward = {0,0,0,0};
 	switch(state){
-		case PLAYER_STATE_IDLE:
-			Idle();
+		case PLAYER_STATE_FREE:
+			Free();
 			break;
-		case PLAYER_STATE_WALK:
-			Walk();
+		case PLAYER_STATE_ATTACK_MAIN:
+			Attack();
 			break;
-		case PLAYER_STATE_JUMP:
-			Jump();
-			break;
-		case PLAYER_STATE_ATTACK:
+		case PLAYER_STATE_ATTACK_SUB:
 			Attack();
 			break;
 	}
@@ -87,8 +55,10 @@ void Player::Update()
 		transform_.position_.y = data.start.y - data.dist;
 	}
 
-	// カメラの位置と向きの更新
-	XMVECTOR vCam = {0,5,-20,0};
+	// プレイヤーから見たカメラの位置と向きの更新
+	constexpr int camHeight = 20; // カメラの高さ
+	constexpr int camDistance = -20; // カメラとプレイヤーの距離（Z軸方向）
+	XMVECTOR vCam = {0,camHeight,camDistance,0};
 	vCam = XMVector3TransformCoord(vCam, mRotate);
 	
 	XMFLOAT3 camPos;
@@ -113,73 +83,40 @@ void Player::Release()
 {
 }
 
-void Player::Idle()
+void Player::SetParameter(std::string fileName)
 {
-	
-	if (moveWork) {
-		state = PLAYER_STATE_WALK;
-	}
-	if (moveJump) {
-		state = PLAYER_STATE_JUMP;
+	std::string path = "Data/";
+	CsvReader* csv = new CsvReader(path + fileName + ".csv");
+
+	const int paramColumn = 1; // パラメーターの列番号
+	for (int line = 0; line < csv->GetLines(); line++) {
+		param_.hp_ = csv->GetInt(PLAYER_HP, paramColumn);
+		param_.power_ = csv->GetInt(PLAYER_POWER, paramColumn);
+		param_.speed_ = csv->GetFloat(PLAYER_SPEED, paramColumn);
+		param_.velocity_ = { 0, csv->GetFloat(PLAYER_VELOCITY, paramColumn), 0 };
+		param_.gravity_ = csv->GetFloat(PLAYER_GRAVITY, paramColumn);
 	}
 }
 
-void Player::Walk()
+void Player::Free()
 {
-	if(!moveWork) {
-		state = PLAYER_STATE_IDLE;
+	if(Input::IsKey(DIK_A)) {
+		vPos += {-param_.speed_, 0, 0, 0};
+	}
+	if(Input::IsKey(DIK_W)) {
+		vPos += {0, 0, param_.speed_, 0};
+	}
+	if(Input::IsKey(DIK_S)) {
+		vPos += {0, 0, -param_.speed_, 0};
+	}
+	if(Input::IsKey(DIK_D)) {
+		vPos += {param_.speed_, 0, 0, 0};
 	}
 
-	XMVECTOR move = XMVectorZero();
-
-	if (Input::IsKey(DIK_W)) {
-		move += XMVectorSet(0, 0, 0.1f, 0);
-	}
-	if (Input::IsKey(DIK_S)) {
-		move += XMVectorSet(0, 0, -0.1f, 0);
-	}
-	if (Input::IsKey(DIK_A)) {
-		move += XMVectorSet(-0.1f, 0, 0, 0);
-	}
-	if (Input::IsKey(DIK_D)) {
-		move += XMVectorSet(0.1f, 0, 0, 0);
+	if(Input::IsKey(DIK_SPACE)) {
+		vPos += param_.velocity_;
 	}
 
-	XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-
-	move = XMVector3TransformCoord(move, mRotate);
-
-	vPos += move;
-}
-
-void Player::Jump()
-{
-	if (isGround && !moveJump) {
-		state = PLAYER_STATE_IDLE;
-	}
-
-	XMVECTOR move = XMVectorZero();
-
-	if (Input::IsKey(DIK_W)) {
-		move += XMVectorSet(0, 0, 0.1f, 0);
-	}
-	if (Input::IsKey(DIK_S)) {
-		move += XMVectorSet(0, 0, -0.1f, 0);
-	}
-	if (Input::IsKey(DIK_A)) {
-		move += XMVectorSet(-0.1f, 0, 0, 0);
-	}
-	if (Input::IsKey(DIK_D)) {
-		move += XMVectorSet(0.1f, 0, 0, 0);
-	}
-
-	XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-
-	move = XMVector3TransformCoord(move, mRotate);
-
-	vPos += move;
-
-	// ジャンプ
 }
 
 void Player::Attack()
