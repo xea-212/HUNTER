@@ -49,9 +49,9 @@ void Camera::Update()
 	}
 
 	// カメラの位置を更新
-	_position.x = _target.x + cosf(pitch) * sinf(yaw) * distance;
+	_position.x = _target.x - cosf(pitch) * sinf(yaw) * distance;
 	_position.y = _target.y + sinf(pitch) * distance;
-	_position.z = _target.z + cosf(pitch) * cosf(yaw) * distance;
+	_position.z = _target.z - cosf(pitch) * cosf(yaw) * distance;
 
 	//ビュー行列
 	_view = XMMatrixLookAtLH(XMVectorSet(_position.x, _position.y, _position.z, 0),

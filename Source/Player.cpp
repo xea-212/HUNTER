@@ -14,6 +14,7 @@ Player::Player(GameObject* parent)
 void Player::Initialize()
 {
 	hModel_ = Model::Load("Model/Character/Player.fbx");
+	transform_.scale_ = { 0.05f, 0.05f, 0.05f };
 	state = PLAYER_STATE_FREE;
 
 	SetParameter("PlayerParam");
@@ -104,8 +105,8 @@ void Player::Free()
 		float yaw = Camera::GetYaw();
 
 		// カメラの向きに合わせて移動方向を計算
-		float dirX = cosf(yaw) * moveX + sinf(yaw) * moveZ;
-		float dirZ = -sinf(yaw) * moveX + cosf(yaw) * moveZ;
+		float dirX = moveX * cosf(yaw) - moveZ * sinf(yaw);
+		float dirZ = moveX * sinf(yaw) + moveZ * cosf(yaw);
 
 		// ベクトルの長さを計算
 		float length = sqrtf(dirX * dirX + dirZ * dirZ);
