@@ -232,6 +232,9 @@
     <ClInclude Include="Source\StageObject.h">
       <Filter>03Scene\Play</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Animator.h">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
