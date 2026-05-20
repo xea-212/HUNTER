@@ -42,6 +42,8 @@ public:
 	int GetPower() { return param_.power_; } // 攻撃力を取得
 	int Damage(int damage) { param_.hp_ -= damage; return param_.hp_; } // ダメージを受ける（体力を減らす）関数。引数はダメージ量。戻り値は現在の体力。
 	int Heal(int heal) { param_.hp_ += heal; return param_.hp_; } // 回復する（体力を増やす）関数。引数は回復量。戻り値は現在の体力。
+
+	XMFLOAT3 GetPosition() { return transform_.position_; } // プレイヤーの位置を取得
 private:
 	int hModel_; // モデルのハンドル
 	PlayerState state; // プレイヤーの状態
@@ -56,5 +58,5 @@ private:
 	};
 	PlayerParam param_; // プレイヤーのパラメーター
 	
-	XMVECTOR vPos;
+	XMVECTOR vPos; // プレイヤーの位置
 };

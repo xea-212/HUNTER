@@ -54,23 +54,6 @@ void Player::Update()
 	if(data.hit) {
 		transform_.position_.y = data.start.y - data.dist;
 	}
-
-	// プレイヤーから見たカメラの位置と向きの更新
-	constexpr int camHeight = 20; // カメラの高さ
-	constexpr int camDistance = -20; // カメラとプレイヤーの距離（Z軸方向）
-	XMVECTOR vCam = {0,camHeight,camDistance,0};
-	vCam = XMVector3TransformCoord(vCam, mRotate);
-	
-	XMFLOAT3 camPos;
-	XMStoreFloat3(&camPos, vPos + vCam);
-	Camera::SetPosition(camPos);
-
-	XMVECTOR vForward = XMVector3TransformCoord(XMVectorSet(0, 0, 1, 0), mRotate);
-
-	XMFLOAT3 camTarget;
-	XMStoreFloat3(&camTarget, vPos + vForward);
-
-	Camera::SetTarget(camTarget);
 }
 
 void Player::Draw()
@@ -88,7 +71,7 @@ void Player::SetParameter(std::string fileName)
 	std::string path = "Data/";
 	CsvReader* csv = new CsvReader(path + fileName + ".csv");
 
-	const int paramColumn = 1; // パラメーターの列番号
+	constexpr int paramColumn = 1; // パラメーターの列番号
 	for (int line = 0; line < csv->GetLines(); line++) {
 		param_.hp_ = csv->GetInt(PLAYER_HP, paramColumn);
 		param_.power_ = csv->GetInt(PLAYER_POWER, paramColumn);
@@ -100,23 +83,44 @@ void Player::SetParameter(std::string fileName)
 
 void Player::Free()
 {
+	float moveX = 0.0f;
+	float moveZ = 0.0f;
+
 	if(Input::IsKey(DIK_A)) {
-		vPos += {-param_.speed_, 0, 0, 0};
+		moveX -= param_.speed_;
 	}
 	if(Input::IsKey(DIK_W)) {
-		vPos += {0, 0, param_.speed_, 0};
+		moveZ += param_.speed_;
 	}
 	if(Input::IsKey(DIK_S)) {
-		vPos += {0, 0, -param_.speed_, 0};
+		moveZ -= param_.speed_;
 	}
 	if(Input::IsKey(DIK_D)) {
-		vPos += {param_.speed_, 0, 0, 0};
+		moveX += param_.speed_;
 	}
 
-	if(Input::IsKey(DIK_SPACE)) {
-		vPos += param_.velocity_;
-	}
+	// 入力時のみ
+	if (moveX != 0.0f || moveZ != 0.0f) {
+		float yaw = Camera::GetYaw();
 
+		// カメラの向きに合わせて移動方向を計算
+		float dirX = cosf(yaw) * moveX + sinf(yaw) * moveZ;
+		float dirZ = -sinf(yaw) * moveX + cosf(yaw) * moveZ;
+
+		// ベクトルの長さを計算
+		float length = sqrtf(dirX * dirX + dirZ * dirZ);
+
+		if (length > 0.0f) {
+			dirX /= length;
+			dirZ /= length;
+		}
+
+		// 回転
+		transform_.rotate_.y = XMConvertToDegrees(atan2f(dirX, dirZ));
+
+		// 移動
+		vPos += XMVectorSet(dirX * param_.speed_, 0, dirZ * param_.speed_, 0);
+	}
 }
 
 void Player::Attack()

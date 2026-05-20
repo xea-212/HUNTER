@@ -6,6 +6,7 @@
 //-----------------------------------------------------------
 namespace Camera
 {
+
 	//初期化（プロジェクション行列作成）
 	void Initialize();
 
@@ -32,4 +33,6 @@ namespace Camera
 
 	//ビルボード用回転行列を取得
 	XMMATRIX GetBillboardMatrix();
+
+	float GetYaw(); // カメラの回転角度（Yaw）を取得
 };

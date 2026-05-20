@@ -1,6 +1,7 @@
 #include "PlayScene.h"
 #include "../Engine/SceneManager.h"
 #include "../Engine/Input.h"
+#include "../Engine/Camera.h"
 #include "Sky.h"
 #include "Player.h"
 #include "Enemy.h"
@@ -13,6 +14,8 @@ PlayScene::PlayScene(GameObject* parent)
 
 void PlayScene::Initialize()
 {
+	ShowCursor(false);
+
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
 	//Instantiate<Sky>(this);
@@ -28,6 +31,12 @@ void PlayScene::Update()
 		SceneManager* sceneManager = (SceneManager*)GetParent();
 		sceneManager->ChangeScene(SCENE_ID::SCENE_ID_RESULT);
 	}
+
+	XMFLOAT3 target = player->GetPosition();
+	const float topOffset = 5.0f; // プレイヤーの頭上に焦点を設定するためのオフセット
+	target.y += topOffset; // プレイヤーの頭上に焦点を設定
+	Camera::SetTarget(target);
+	
 }
 
 void PlayScene::Draw()
