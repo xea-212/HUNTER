@@ -28,10 +28,11 @@ namespace Model
 		//アニメーションのフレーム
 		float nowFrame, animSpeed;
 		int startFrame, endFrame;
+		bool loop;
 
 
 		//初期化
-		ModelData() : pFbx(nullptr), nowFrame(0), startFrame(0), endFrame(0), animSpeed(0)
+		ModelData() : pFbx(nullptr), nowFrame(0), startFrame(0), endFrame(0), animSpeed(0), loop(false)
 		{
 		}
 
@@ -39,12 +40,14 @@ namespace Model
 		//引数：startFrame	開始フレーム
 		//引数：endFrame	終了フレーム
 		//引数：animSpeed	アニメーション速度
-		void SetAnimFrame(int start, int end, float speed)
+		//引数：isLoop		アニメーションをループさせるかどうか
+		void SetAnimFrame(int model,int start, int end, float speed, bool isLoop)
 		{
 			nowFrame = (float)start;
 			startFrame = start;
 			endFrame = end;
 			animSpeed = speed;
+			loop = isLoop;
 		}
 	};
 
@@ -75,7 +78,8 @@ namespace Model
 	//引数：startFrame	開始フレーム
 	//引数：endFrame	終了フレーム
 	//引数：animSpeed	アニメーション速度
-	void SetAnimFrame(int handle, int startFrame, int endFrame, float animSpeed);
+	//引数：isLoop		アニメーションをループさせるかどうか
+	void SetAnimFrame(int handle, int startFrame, int endFrame, float animSpeed, bool isLoop);
 
 	//現在のアニメーションのフレームを取得
 	int GetAnimFrame(int handle);

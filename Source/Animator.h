@@ -4,13 +4,14 @@
 
 enum AnimationParam
 {
-	ANIMATION_NAME = 0,
-	ANIMATION_FILENAME,
+	ANIMATION_FILENAME = 0,
+	ANIMATION_START,
+	ANIMATION_END,
 	ANIMATION_SPEED,
 	ANIMATION_LOOP,
 };
 
-enum AnimID
+enum PlayerAnimID
 {
 	ANIM_PLAYER_IDLE = 0,
 	ANIM_PLAYER_WALK,
@@ -31,19 +32,21 @@ public:
 	void Draw() override;
 	void Release() override;
 
+	void SetModel(int model) { model_ = model; }
 	void AttachAnimation(std::string fileName); // CSVファイルからアニメーションデータを読み込む
-	void Play(int ID, float speed); // アニメーションを再生
+	void Play(int ID, float speed = 1.0f); // アニメーションを再生
 private:
 	struct AnimationData
 	{
-		std::string name_; // アニメーションの名前
 		std::string fileName_; // アニメーションのファイル名
+		int startFrame_; // アニメーションの開始フレーム
+		int endFrame_; // アニメーションの終了フレーム
 		float speed_; // アニメーションの再生速度
 		bool loop_; // アニメーションをループさせるかどうか
 	};
 	std::vector<AnimationData> anim_;
+	int model_;
 	int currentAnim_;
-	float currentTime_;
+	float speed_;
 	bool isPlay_;
-	bool isLoop_;
 };

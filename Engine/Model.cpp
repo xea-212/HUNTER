@@ -69,7 +69,16 @@ namespace Model
 
 		//最後までアニメーションしたら戻す
 		if (_datas[handle]->nowFrame > (float)_datas[handle]->endFrame)
-			_datas[handle]->nowFrame = (float)_datas[handle]->startFrame;
+		{
+			if (_datas[handle]->loop)
+			{
+				_datas[handle]->nowFrame = (float)_datas[handle]->startFrame;
+			}
+			else
+			{
+				_datas[handle]->nowFrame = (float)_datas[handle]->endFrame;
+			}
+		}
 
 
 
@@ -77,6 +86,16 @@ namespace Model
 		{
 			_datas[handle]->pFbx->Draw(_datas[handle]->transform, (int)_datas[handle]->nowFrame);
 		}
+
+		char text[256];
+
+		sprintf_s(
+			text,
+			"frame = %f speed = %f\n",
+			_datas[handle]->nowFrame,
+			_datas[handle]->animSpeed);
+
+		OutputDebugStringA(text);
 	}
 
 
@@ -126,9 +145,9 @@ namespace Model
 
 
 	//アニメーションのフレーム数をセット
-	void SetAnimFrame(int handle, int startFrame, int endFrame, float animSpeed)
+	void SetAnimFrame(int handle, int startFrame, int endFrame, float animSpeed, bool loop)
 	{
-		_datas[handle]->SetAnimFrame(startFrame, endFrame, animSpeed);
+		_datas[handle]->SetAnimFrame(handle, startFrame, endFrame, animSpeed, loop);
 	}
 
 

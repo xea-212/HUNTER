@@ -1,5 +1,6 @@
 #pragma once
 #include "../Engine/GameObject.h"
+#include "Animator.h"
 
 enum PlayerState
 {
@@ -57,6 +58,7 @@ private:
 		XMVECTOR velocity_; // 速度
 	};
 	PlayerParam param_; // プレイヤーのパラメーター
+	Animator* animator_; // アニメーター
 	
 	XMVECTOR vPos; // プレイヤーの位置
 };

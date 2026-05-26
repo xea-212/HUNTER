@@ -18,6 +18,11 @@ void Player::Initialize()
 	state = PLAYER_STATE_FREE;
 
 	SetParameter("PlayerParam");
+
+	animator_ = Instantiate<Animator>(this);
+	animator_->SetModel(hModel_);
+	animator_->AttachAnimation("PlayerAnim");
+	animator_->Play(ANIM_PLAYER_IDLE);
 }
 
 void Player::Update()
@@ -89,15 +94,23 @@ void Player::Free()
 
 	if(Input::IsKey(DIK_A)) {
 		moveX -= param_.speed_;
+		animator_->Play(ANIM_PLAYER_WALK);
 	}
 	if(Input::IsKey(DIK_W)) {
 		moveZ += param_.speed_;
+		animator_->Play(ANIM_PLAYER_WALK);
 	}
 	if(Input::IsKey(DIK_S)) {
 		moveZ -= param_.speed_;
+		animator_->Play(ANIM_PLAYER_WALK);
 	}
 	if(Input::IsKey(DIK_D)) {
 		moveX += param_.speed_;
+		animator_->Play(ANIM_PLAYER_WALK);
+	}
+	// どのキーも押されてない
+	if (moveX == 0.0f && moveZ == 0.0f) {
+		animator_->Play(ANIM_PLAYER_IDLE);
 	}
 
 	// 入力時のみ
@@ -126,4 +139,5 @@ void Player::Free()
 
 void Player::Attack()
 {
+	animator_->Play(ANIM_PLAYER_ATTACK);
 }
