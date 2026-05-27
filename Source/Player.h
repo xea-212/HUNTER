@@ -58,7 +58,7 @@ private:
 		XMVECTOR velocity_; // 速度
 	};
 	PlayerParam param_; // プレイヤーのパラメーター
-	Animator* animator_; // アニメーター
+	Animator* animator; // アニメーター
 	
 	XMVECTOR vPos; // プレイヤーの位置
 };

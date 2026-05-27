@@ -23,7 +23,7 @@ void TitleUI::Draw()
 {
 	//描画
 	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_);
+	Model::Draw(hModel_, 0.0f);
 }
 
 void TitleUI::Release()

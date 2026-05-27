@@ -5,6 +5,7 @@
 #include "../Engine/Camera.h"
 #include "StageObject.h"
 #include "../Engine/CsvReader.h"
+#include "Animator.h"
 
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), hModel_(-1)
@@ -19,10 +20,9 @@ void Player::Initialize()
 
 	SetParameter("PlayerParam");
 
-	animator_ = Instantiate<Animator>(this);
-	animator_->SetModel(hModel_);
-	animator_->AttachAnimation("PlayerAnim");
-	animator_->Play(ANIM_PLAYER_IDLE);
+	animator->SetModel(hModel_);
+	animator->AttachAnimation("PlayerAnim");
+	animator->Play(0);
 }
 
 void Player::Update()
@@ -65,7 +65,7 @@ void Player::Update()
 void Player::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_);
+	Model::Draw(hModel_, animator->GetTime());
 }
 
 void Player::Release()
@@ -94,23 +94,18 @@ void Player::Free()
 
 	if(Input::IsKey(DIK_A)) {
 		moveX -= param_.speed_;
-		animator_->Play(ANIM_PLAYER_WALK);
 	}
 	if(Input::IsKey(DIK_W)) {
 		moveZ += param_.speed_;
-		animator_->Play(ANIM_PLAYER_WALK);
 	}
 	if(Input::IsKey(DIK_S)) {
 		moveZ -= param_.speed_;
-		animator_->Play(ANIM_PLAYER_WALK);
 	}
 	if(Input::IsKey(DIK_D)) {
 		moveX += param_.speed_;
-		animator_->Play(ANIM_PLAYER_WALK);
 	}
 	// どのキーも押されてない
 	if (moveX == 0.0f && moveZ == 0.0f) {
-		animator_->Play(ANIM_PLAYER_IDLE);
 	}
 
 	// 入力時のみ
@@ -139,5 +134,4 @@ void Player::Free()
 
 void Player::Attack()
 {
-	animator_->Play(ANIM_PLAYER_ATTACK);
 }

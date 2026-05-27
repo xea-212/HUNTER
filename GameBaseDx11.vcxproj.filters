@@ -137,6 +137,9 @@
     <ClCompile Include="Source\Animator.cpp">
       <Filter>03Scene\Play</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Time.cpp">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -237,6 +240,9 @@
     </ClInclude>
     <ClInclude Include="Source\Animator.h">
       <Filter>03Scene\Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Time.h">
+      <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

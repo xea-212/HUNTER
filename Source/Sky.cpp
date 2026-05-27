@@ -18,7 +18,7 @@ void Sky::Update()
 void Sky::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_);
+	Model::Draw(hModel_, 0.0f);
 }
 
 void Sky::Release()

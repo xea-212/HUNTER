@@ -1,9 +1,13 @@
 #include "Animator.h"
+#include "../Engine/Time.h"
 #include "../Engine/CsvReader.h"
-#include "../Engine/Model.h"
 
 Animator::Animator(GameObject* parent)
-	:GameObject(parent, "Animator"), anim_{}, model_(-1), currentAnim_(-1), isPlay_(false)
+	:GameObject(parent, "Animator"), model_(-1), currentAnim_(-1), isPlay_(false), time_(0.0f), speed_(1.0f)
+{
+}
+
+Animator::~Animator()
 {
 }
 
@@ -13,6 +17,23 @@ void Animator::Initialize()
 
 void Animator::Update()
 {
+	if (!isPlay_ || currentAnim_ < 0 || model_ < 0) {
+		return;
+	}
+
+	AnimationData& anim = anim_[currentAnim_];
+
+	time_ += Time::DeltaTime() * anim.speed_ * speed_;
+
+	if(time_ > anim.endTime_) {
+		if (anim.loop_) {
+			time_ = anim.startTime_;
+		} 
+		else {
+			time_ = anim.endTime_;
+			isPlay_ = false;
+		}
+	}
 }
 
 void Animator::Draw()
@@ -30,23 +51,38 @@ void Animator::AttachAnimation(std::string fileName)
 
 	for (int line = 0; line < csv->GetLines(); line++) {
 		AnimationData data;
-		data.fileName_ = csv->GetString(line, ANIMATION_FILENAME);
-		data.startFrame_ = csv->GetInt(line, ANIMATION_START);
-		data.endFrame_ = csv->GetInt(line, ANIMATION_END);
-		data.speed_ = csv->GetFloat(line, ANIMATION_SPEED);
-		data.loop_ = csv->GetInt(line, ANIMATION_LOOP);
+		data.fileName_ = csv->GetString(line, ANIMATION_DATA_FILENAME);
+		data.startTime_ = csv->GetFloat(line, ANIMATION_DATA_STARTTIME);
+		data.endTime_ = csv->GetFloat(line, ANIMATION_DATA_ENDTIME);
+		data.speed_ = csv->GetFloat(line, ANIMATION_DATA_SPEED);
+		data.loop_ = csv->GetInt(line, ANIMATION_DATA_LOOP);
 		anim_.push_back(data);
 	}
+	delete csv;
 }
 
 void Animator::Play(int ID, float speed)
 {
-	if (ID < 0 || ID >= anim_.size() || currentAnim_ == ID)
+	if (ID < 0 || ID >= anim_.size()) {
 		return;
-
+	}
 	currentAnim_ = ID;
-	speed_ = speed * anim_[ID].speed_;
+	speed_ = speed;
+	time_ = anim_[ID].startTime_;
 	isPlay_ = true;
+}
 
-	Model::SetAnimFrame(model_, anim_[ID].startFrame_, anim_[ID].endFrame_, speed_, anim_[ID].loop_);
+void Animator::Stop()
+{
+	isPlay_ = false;
+}
+
+void Animator::SetModel(int hModel)
+{
+	model_ = hModel;
+}
+
+float Animator::GetTime()
+{
+	return time_;
 }

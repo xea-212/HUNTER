@@ -33,7 +33,7 @@ void Enemy::Update()
 void Enemy::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_);
+	Model::Draw(hModel_, 1.0f);
 }
 
 void Enemy::Release()

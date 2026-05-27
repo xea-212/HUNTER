@@ -25,29 +25,9 @@ namespace Model
 		//行列
 		Transform 	transform;
 
-		//アニメーションのフレーム
-		float nowFrame, animSpeed;
-		int startFrame, endFrame;
-		bool loop;
-
-
 		//初期化
-		ModelData() : pFbx(nullptr), nowFrame(0), startFrame(0), endFrame(0), animSpeed(0), loop(false)
+		ModelData() : pFbx(nullptr)
 		{
-		}
-
-		//アニメーションのフレーム数をセット
-		//引数：startFrame	開始フレーム
-		//引数：endFrame	終了フレーム
-		//引数：animSpeed	アニメーション速度
-		//引数：isLoop		アニメーションをループさせるかどうか
-		void SetAnimFrame(int model,int start, int end, float speed, bool isLoop)
-		{
-			nowFrame = (float)start;
-			startFrame = start;
-			endFrame = end;
-			animSpeed = speed;
-			loop = isLoop;
 		}
 	};
 
@@ -63,7 +43,7 @@ namespace Model
 	//描画
 	//引数：handle	描画したいモデルの番号
 	//引数：matrix	ワールド行列
-	void Draw(int handle);
+	void Draw(int handle, float animationTime);
 
 	//任意のモデルを開放
 	//引数：handle	開放したいモデルの番号
@@ -72,17 +52,6 @@ namespace Model
 	//全てのモデルを解放
 	//（シーンが切り替わるときは必ず実行）
 	void AllRelease();
-
-	//アニメーションのフレーム数をセット
-	//引数：handle		設定したいモデルの番号
-	//引数：startFrame	開始フレーム
-	//引数：endFrame	終了フレーム
-	//引数：animSpeed	アニメーション速度
-	//引数：isLoop		アニメーションをループさせるかどうか
-	void SetAnimFrame(int handle, int startFrame, int endFrame, float animSpeed, bool isLoop);
-
-	//現在のアニメーションのフレームを取得
-	int GetAnimFrame(int handle);
 
 	//任意のボーンの位置を取得
 	//引数：handle		調べたいモデルの番号
