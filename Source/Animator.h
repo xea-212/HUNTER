@@ -12,6 +12,8 @@ public:
 		float endTime_; // アニメーションの終了時間
 		float speed_; // アニメーションの速度
 		bool loop_; // アニメーションをループさせるかどうか
+
+		int animModel_; // アニメーションのモデルのハンドル
 	};
 
 	enum ANIMATION_DATA

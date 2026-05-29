@@ -1,6 +1,7 @@
 #include "Animator.h"
 #include "../Engine/Time.h"
 #include "../Engine/CsvReader.h"
+#include "../Engine/Model.h"
 
 Animator::Animator(GameObject* parent)
 	:GameObject(parent, "Animator"), model_(-1), currentAnim_(-1), isPlay_(false), time_(0.0f), speed_(1.0f)
@@ -56,6 +57,7 @@ void Animator::AttachAnimation(std::string fileName)
 		data.endTime_ = csv->GetFloat(line, ANIMATION_DATA_ENDTIME);
 		data.speed_ = csv->GetFloat(line, ANIMATION_DATA_SPEED);
 		data.loop_ = csv->GetInt(line, ANIMATION_DATA_LOOP);
+		data.animModel_ = Model::Load(path + data.fileName_ + ".fbx");
 		anim_.push_back(data);
 	}
 	delete csv;
