@@ -120,6 +120,10 @@ XMFLOAT3 Fbx::GetBonePosition(std::string boneName)
 
 void Fbx::Draw(Transform& transform, float animationTime)
 {
+	char text[256];
+	sprintf_s(text, "time = %f\n", animationTime);
+	OutputDebugStringA(text);
+
 	Direct3D::SetBlendMode(Direct3D::BLEND_DEFAULT);
 
 	// ‚»‚ÌuŠÔ‚Ì©•ª‚Ìp¨s—ñ‚ğ“¾‚é

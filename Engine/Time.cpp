@@ -59,7 +59,7 @@ void Time::Refresh()
 	else
 		deltaTime = dt;
 
-	// フリーズ防止（任意）
+	// フリーズ防止
 	if (deltaTime > 0.05f)
 		deltaTime = 0.05f;
 }

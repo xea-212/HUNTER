@@ -20,9 +20,9 @@ void Player::Initialize()
 
 	SetParameter("PlayerParam");
 
+	animator = Instantiate<Animator>(this);
 	animator->SetModel(hModel_);
 	animator->AttachAnimation("PlayerAnim");
-	animator->Play(0);
 }
 
 void Player::Update()
@@ -106,17 +106,19 @@ void Player::Free()
 	}
 	// どのキーも押されてない
 	if (moveX == 0.0f && moveZ == 0.0f) {
+		animator->Play(0); // 待機アニメーション
 	}
 
 	// 入力時のみ
 	if (moveX != 0.0f || moveZ != 0.0f) {
+
 		float yaw = Camera::GetYaw();
 
-		// カメラの向きに合わせて移動方向を計算
-		float dirX = moveX * cosf(yaw) - moveZ * sinf(yaw);
-		float dirZ = moveX * sinf(yaw) + moveZ * cosf(yaw);
+		// カメラ基準移動
+		float dirX = moveX * cosf(yaw) + moveZ * sinf(yaw);
+		float dirZ = -moveX * sinf(yaw) + moveZ * cosf(yaw);
 
-		// ベクトルの長さを計算
+		// 正規化
 		float length = sqrtf(dirX * dirX + dirZ * dirZ);
 
 		if (length > 0.0f) {
@@ -124,11 +126,35 @@ void Player::Free()
 			dirZ /= length;
 		}
 
-		// 回転
-		transform_.rotate_.y = XMConvertToDegrees(atan2f(dirX, dirZ));
+		// 向きたい角度
+		float targetRotY = XMConvertToDegrees(atan2f(dirX, dirZ));
+
+		// 現在角度
+		float currentRotY = transform_.rotate_.y;
+
+		// 角度差
+		float diff = targetRotY - currentRotY;
+
+		while (diff > 180.0f) diff -= 360.0f;
+		while (diff < -180.0f) diff += 360.0f;
+
+		// 補間
+		currentRotY += diff * 0.15f;
+
+		transform_.rotate_.y = currentRotY;
 
 		// 移動
-		vPos += XMVectorSet(dirX * param_.speed_, 0, dirZ * param_.speed_, 0);
+		vPos += XMVectorSet(
+			dirX * param_.speed_,
+			0,
+			dirZ * param_.speed_,
+			0
+		);
+
+		animator->Play(1); // 移動アニメ
+	}
+	else {
+		animator->Play(0); // 待機
 	}
 }
 

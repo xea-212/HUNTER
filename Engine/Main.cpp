@@ -1,10 +1,3 @@
-
-//
-//　最終更新日：2023/10/20
-//
-
-
-
 #include <Windows.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -125,6 +118,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 				//入力（キーボード、マウス、コントローラー）情報を更新
 				Input::Update();
+
+				//ESCキーが押されたら終了
+				if (Input::IsKeyDown(DIK_ESCAPE))
+				{
+					PostQuitMessage(0);	//プログラム終了
+				}
 
 				//全オブジェクトの更新処理
 				//ルートオブジェクトのUpdateを呼んだあと、自動的に子、孫のUpdateが呼ばれる
