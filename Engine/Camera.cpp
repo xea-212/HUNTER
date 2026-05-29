@@ -40,7 +40,7 @@ void Camera::Update()
 
 	// ピッチの制限
 	constexpr float maxPitch = XMConvertToRadians(89.0f); // ピッチの最大
-	constexpr float minPitch = XMConvertToRadians(-89.0f); // ピッチの最小
+	constexpr float minPitch = XMConvertToRadians(5.0f); // ピッチの最小
 	if (pitch > maxPitch) {
 		pitch = maxPitch;
 	}

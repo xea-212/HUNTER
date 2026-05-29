@@ -9,6 +9,8 @@ Sky::Sky(GameObject* parent)
 void Sky::Initialize()
 {
 	hModel_ = Model::Load("Model/Stage/Sky.fbx");
+	transform_.position_ = { 0.0f, -10.0f, 0.0f };
+	transform_.scale_ = { 0.5f, 0.5f, 0.5f };
 }
 
 void Sky::Update()

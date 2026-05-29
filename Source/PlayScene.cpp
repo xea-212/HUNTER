@@ -18,7 +18,7 @@ void PlayScene::Initialize()
 
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
-	//Instantiate<Sky>(this);
+	Instantiate<Sky>(this);
 	Instantiate<StageManager>(this);
 	Instantiate<StageObject>(this);
 }
