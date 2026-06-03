@@ -99,6 +99,23 @@ void Fbx::CheckNode(FbxNode * pNode, std::vector<FbxParts*>* pPartsList)
 	}
 }
 
+FbxNode* Fbx::FindNodeRecursive(FbxNode* pNode, const char* name)
+{
+	if (pNode == nullptr)
+		return nullptr;
+
+	if (strcmp(pNode->GetName(), name) == 0)
+		return pNode;
+
+	for (int i = 0; i < pNode->GetChildCount(); i++)
+	{
+		FbxNode* foundNode = FindNodeRecursive(pNode->GetChild(i), name);
+		if (foundNode != nullptr)
+			return foundNode;
+	}
+	return nullptr;
+}
+
 
 void Fbx::Release()
 {
@@ -118,21 +135,18 @@ XMFLOAT3 Fbx::GetBonePosition(std::string boneName)
 	return position;
 }
 
-void Fbx::Draw(Transform& transform, float animationTime)
+void Fbx::Draw(Transform& transform, int frame)
 {
-	char text[256];
-	sprintf_s(text, "time = %f\n", animationTime);
-	OutputDebugStringA(text);
-
 	Direct3D::SetBlendMode(Direct3D::BLEND_DEFAULT);
-
-	// その瞬間の自分の姿勢行列を得る
-	FbxTime     time;
-	time.SetSecondDouble(animationTime);
 
 	//パーツを1個ずつ描画
 	for (int k = 0; k < parts_.size(); k++)
 	{
+		// その瞬間の自分の姿勢行列を得る
+		FbxTime     time;
+		time.SetTime(0, 0, 0, frame, 0, 0, _frameRate);
+
+
 		//スキンアニメーション（ボーン有り）の場合
 		if (parts_[k]->GetSkinInfo() != nullptr)
 		{
@@ -147,6 +161,29 @@ void Fbx::Draw(Transform& transform, float animationTime)
 	}
 }
 
+void Fbx::Draw(Transform& transform, Fbx* animFbx, float animationTime)
+{
+	FbxTime time;
+	time.SetSecondDouble(animationTime);
+
+	for (int i = 0; i < parts_.size(); i++)
+	{
+		if (parts_[i]->GetSkinInfo())
+		{
+			parts_[i]->DrawSkinAnime(transform, time, animFbx);
+		}
+		else
+		{
+			parts_[i]->DrawMeshAnime(transform, time, animFbx->GetScene());
+		}
+	}
+}
+
+
+FbxNode* Fbx::FindNode(const char* name)
+{
+	return FindNodeRecursive(pFbxScene_->GetRootNode(), name);
+}
 
 //レイキャスト（レイを飛ばして当たり判定）
 void Fbx::RayCast(RayCastData * data)

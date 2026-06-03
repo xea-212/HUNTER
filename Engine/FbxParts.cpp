@@ -539,6 +539,82 @@ void FbxParts::DrawSkinAnime(Transform& transform, FbxTime time)
 
 }
 
+void FbxParts::DrawSkinAnime(Transform& transform, FbxTime time, FbxScene* animScene)
+{
+	// ボーンごとの現在の行列を取得
+	for (int i = 0; i < numBone_; i++)
+	{
+		FbxNode* meshBone = ppCluster_[i]->GetLink();
+
+		const char* boneName = meshBone->GetName();
+
+		FbxNode* animBone = animScene->FindNode(boneName);	
+		if (animBone == nullptr)
+		{
+			continue;
+		}
+
+		FbxAnimEvaluator* evaluator = animBone->GetScene()->GetAnimationEvaluator();
+
+		FbxMatrix currentPose = evaluator->GetNodeGlobalTransform(animBone, time);
+
+		XMFLOAT4X4 pose;
+
+		for (int x = 0; x < 4; x++)
+		{
+			for (int y = 0; y < 4; y++)
+			{
+				pose(x, y) = (float)currentPose.Get(x, y);
+			}
+		}
+
+		pBoneArray_[i].newPose = XMLoadFloat4x4(&pose);
+
+		pBoneArray_[i].diffPose = XMMatrixInverse(nullptr, pBoneArray_[i].bindPose);
+
+		pBoneArray_[i].diffPose *= pBoneArray_[i].newPose;
+	}
+
+	// 頂点変形
+	for (DWORD i = 0; i < vertexCount_; i++)
+	{
+		XMMATRIX matrix;
+		ZeroMemory(&matrix, sizeof(matrix));
+
+		for (int m = 0; m < numBone_; m++)
+		{
+			if (pWeightArray_[i].pBoneIndex[m] < 0)
+			{
+				break;
+			}
+
+			matrix += pBoneArray_[pWeightArray_[i].pBoneIndex[m]].diffPose * pWeightArray_[i].pBoneWeight[m];
+		}
+
+		XMVECTOR pos = XMLoadFloat3(&pWeightArray_[i].posOrigin);
+
+		XMVECTOR normal = XMLoadFloat3(&pWeightArray_[i].normalOrigin);
+
+		XMStoreFloat3(&pVertexData_[i].position, XMVector3TransformCoord(pos, matrix));
+
+		XMStoreFloat3(&pVertexData_[i].normal, XMVector3TransformCoord(normal, matrix));
+	}
+
+	// GPUへ転送
+	D3D11_MAPPED_SUBRESOURCE msr = {};
+
+	Direct3D::pContext_->Map(pVertexBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
+
+	if (msr.pData)
+	{
+		memcpy_s(msr.pData, msr.RowPitch, pVertexData_, sizeof(VERTEX) * vertexCount_);
+
+		Direct3D::pContext_->Unmap(pVertexBuffer_, 0);
+	}
+
+	Draw(transform);
+}
+
 void FbxParts::DrawMeshAnime(Transform& transform, FbxTime time, FbxScene * scene)
 {
 	//// その瞬間の自分の姿勢行列を得る

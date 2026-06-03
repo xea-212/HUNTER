@@ -56,16 +56,37 @@ namespace Model
 
 
 	//描画
-	void Draw(int handle, float animationTime)
+	void Draw(int handle)
 	{
 		if (handle < 0 || handle >= _datas.size() || _datas[handle] == nullptr)
 		{
 			return;
 		}
 
+		//アニメーションを進める
+		_datas[handle]->nowFrame += _datas[handle]->animSpeed;
+
+		//最後までアニメーションしたら戻す
+		if (_datas[handle]->nowFrame > (float)_datas[handle]->endFrame)
+			_datas[handle]->nowFrame = (float)_datas[handle]->startFrame;
+
+
+
 		if (_datas[handle]->pFbx)
 		{
-			_datas[handle]->pFbx->Draw(_datas[handle]->transform, animationTime);
+			_datas[handle]->pFbx->Draw(_datas[handle]->transform, (int)_datas[handle]->nowFrame);
+		}
+	}
+
+	void Draw(int handle, Transform& transform, float animationTime)
+	{
+		if (handle < 0 || handle >= _datas.size() || _datas[handle] == nullptr)
+		{
+			return;
+		}
+		if (_datas[handle]->pFbx)
+		{
+			_datas[handle]->pFbx->Draw(transform, animationTime);
 		}
 	}
 
@@ -112,6 +133,16 @@ namespace Model
 			}
 		}
 		_datas.clear();
+	}
+
+	void SetAnimFrame(int handle, int startFrame, int endFrame, float animSpeed)
+	{
+		_datas[handle]->SetAnimFrame(startFrame, endFrame, animSpeed);
+	}
+
+	int GetAnimFrame(int handle)
+	{
+		return (int)_datas[handle]->nowFrame;
 	}
 
 

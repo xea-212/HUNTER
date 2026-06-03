@@ -59,7 +59,7 @@ class Fbx
 	//引数：pPartsList	パーツのリスト
 	void CheckNode(FbxNode* pNode, std::vector<FbxParts*> *pPartsList);
 
-
+	FbxNode* FindNodeRecursive(FbxNode* pNode, const char* name);
 
 
 public:
@@ -73,7 +73,8 @@ public:
 
 	//描画
 	//引数：World	ワールド行列
-	void    Draw(Transform& transform, float animationTime);
+	void Draw(Transform& transform, int frame);
+	void Draw(Transform& transform, Fbx* animFbx, float animationTime);
 
 	//解放
 	void    Release();
@@ -83,9 +84,16 @@ public:
 	//戻値：ボーンの位置
 	XMFLOAT3 GetBonePosition(std::string boneName);
 
+	//任意のノードを取得
+	//引数：name	取得したいノードの名前
+	//戻値：ノードのポインタ
+	FbxNode* FindNode(const char* name);
+
 	//レイキャスト（レイを飛ばして当たり判定）
 	//引数：data	必要なものをまとめたデータ
 	void RayCast(RayCastData *data);
+
+	FbxScene* GetScene() { return pFbxScene_; }
 
 };
 

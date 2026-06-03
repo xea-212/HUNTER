@@ -16,7 +16,7 @@ void StageObject::Initialize()
 void StageObject::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_, 0.0f);
+	Model::Draw(hModel_);
 }
 
 void StageObject::Update()

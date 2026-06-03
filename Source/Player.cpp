@@ -6,6 +6,7 @@
 #include "StageObject.h"
 #include "../Engine/CsvReader.h"
 #include "Animator.h"
+#include "../Engine/Time.h"
 
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), hModel_(-1)
@@ -65,7 +66,7 @@ void Player::Update()
 void Player::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_, animator->GetTime());
+	Model::Draw(hModel_);
 }
 
 void Player::Release()
