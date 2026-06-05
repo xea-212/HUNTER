@@ -26,6 +26,10 @@ void Animator::Update()
 
 	time_ += Time::DeltaTime() * anim.speed_ * speed_;
 
+	char text[256];
+	sprintf_s(text, "anim time=%f\n", time_);
+	OutputDebugStringA(text);
+
 	if(time_ > anim.endTime_) {
 		if (anim.loop_) {
 			time_ = anim.startTime_;
@@ -65,23 +69,31 @@ void Animator::AttachAnimation(std::string fileName)
 
 void Animator::Play(int ID, float speed)
 {
-	if (ID < 0 || ID >= anim_.size()) {
+	if (ID < 0 || ID >= anim_.size()){
 		return;
 	}
+
+	if (currentAnim_ == ID && isPlay_){
+		return;
+	}
+
 	currentAnim_ = ID;
 	speed_ = speed;
 	time_ = anim_[ID].startTime_;
 	isPlay_ = true;
 }
-
 void Animator::Stop()
 {
 	isPlay_ = false;
 }
 
-void Animator::SetModel(int hModel)
+int Animator::GetAnimHandle()
 {
-	model_ = hModel;
+	if (currentAnim_ < 0){
+		return -1;
+	}
+
+	return anim_[currentAnim_].animModel_;
 }
 
 float Animator::GetTime()

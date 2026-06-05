@@ -36,7 +36,7 @@ public:
 	void AttachAnimation(std::string fileName); // アニメーションを追加する関数
 	void Play(int ID, float speed = 1.0f); // アニメーションを再生する関数
 	void Stop(); // アニメーションを停止する関数
-	void SetModel(int hModel); // モデルのハンドルを設定する関数
+	int GetAnimHandle(); // 現在再生中のアニメーションのモデルのハンドルを取得する関数
 
 	float GetTime(); // 現在のアニメーションの再生時間を取得する関数
 private:

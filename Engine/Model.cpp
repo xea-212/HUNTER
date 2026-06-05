@@ -78,16 +78,13 @@ namespace Model
 		}
 	}
 
-	void Draw(int handle, Transform& transform, float animationTime)
+	void Draw(int modelHandle, int animHandle, float animationTime)
 	{
-		if (handle < 0 || handle >= _datas.size() || _datas[handle] == nullptr)
-		{
+		if (modelHandle < 0 || animHandle < 0) {
 			return;
 		}
-		if (_datas[handle]->pFbx)
-		{
-			_datas[handle]->pFbx->Draw(transform, animationTime);
-		}
+
+		_datas[modelHandle]->pFbx->Draw(_datas[modelHandle]->transform, _datas[animHandle]->pFbx, animationTime);
 	}
 
 

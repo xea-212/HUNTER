@@ -170,7 +170,7 @@ void Fbx::Draw(Transform& transform, Fbx* animFbx, float animationTime)
 	{
 		if (parts_[i]->GetSkinInfo())
 		{
-			parts_[i]->DrawSkinAnime(transform, time, animFbx);
+			parts_[i]->DrawSkinAnime(transform, animFbx, time);
 		}
 		else
 		{

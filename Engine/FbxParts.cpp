@@ -539,32 +539,26 @@ void FbxParts::DrawSkinAnime(Transform& transform, FbxTime time)
 
 }
 
-void FbxParts::DrawSkinAnime(Transform& transform, FbxTime time, FbxScene* animScene)
+void FbxParts::DrawSkinAnime(Transform& transform, Fbx* animFbx, FbxTime time)
 {
-	// ボーンごとの現在の行列を取得
-	for (int i = 0; i < numBone_; i++)
-	{
-		FbxNode* meshBone = ppCluster_[i]->GetLink();
+	for (int i = 0; i < numBone_; i++) {
+		const char* boneName = ppCluster_[i]->GetLink()->GetName();
 
-		const char* boneName = meshBone->GetName();
+		FbxNode* animBone = animFbx->FindNode(boneName);
 
-		FbxNode* animBone = animScene->FindNode(boneName);	
-		if (animBone == nullptr)
-		{
+		if (!animBone) {
 			continue;
 		}
 
-		FbxAnimEvaluator* evaluator = animBone->GetScene()->GetAnimationEvaluator();
+		FbxAnimEvaluator* evaluator = animFbx->GetScene()->GetAnimationEvaluator();
 
-		FbxMatrix currentPose = evaluator->GetNodeGlobalTransform(animBone, time);
+		FbxAMatrix currentMatrix = evaluator->GetNodeGlobalTransform(animBone, time);
 
 		XMFLOAT4X4 pose;
 
-		for (int x = 0; x < 4; x++)
-		{
-			for (int y = 0; y < 4; y++)
-			{
-				pose(x, y) = (float)currentPose.Get(x, y);
+		for (int x = 0; x < 4; x++) {
+			for (int y = 0; y < 4; y++) {
+				pose(x, y) = (float)currentMatrix.Get(x, y);
 			}
 		}
 
@@ -575,42 +569,39 @@ void FbxParts::DrawSkinAnime(Transform& transform, FbxTime time, FbxScene* animS
 		pBoneArray_[i].diffPose *= pBoneArray_[i].newPose;
 	}
 
-	// 頂点変形
-	for (DWORD i = 0; i < vertexCount_; i++)
-	{
-		XMMATRIX matrix;
-		ZeroMemory(&matrix, sizeof(matrix));
+	for (DWORD i = 0; i < vertexCount_; i++) {
+		XMMATRIX matrix = XMMatrixIdentity();
 
-		for (int m = 0; m < numBone_; m++)
-		{
-			if (pWeightArray_[i].pBoneIndex[m] < 0)
-			{
+		bool first = true;
+
+		for (int j = 0; j < numBone_; j++) {
+			int boneIndex = pWeightArray_[i].pBoneIndex[j];
+
+			if(boneIndex < 0) {
 				break;
 			}
 
-			matrix += pBoneArray_[pWeightArray_[i].pBoneIndex[m]].diffPose * pWeightArray_[i].pBoneWeight[m];
+			float weight = pWeightArray_[i].pBoneWeight[j];
+
+			if (first) {
+				matrix = pBoneArray_[boneIndex].diffPose * weight;
+				first = false;
+			}
+			else {
+				matrix += pBoneArray_[boneIndex].diffPose * weight;
+			}
 		}
-
-		XMVECTOR pos = XMLoadFloat3(&pWeightArray_[i].posOrigin);
-
-		XMVECTOR normal = XMLoadFloat3(&pWeightArray_[i].normalOrigin);
-
-		XMStoreFloat3(&pVertexData_[i].position, XMVector3TransformCoord(pos, matrix));
-
-		XMStoreFloat3(&pVertexData_[i].normal, XMVector3TransformCoord(normal, matrix));
+			XMVECTOR pos = XMLoadFloat3(&pWeightArray_[i].posOrigin);
+			XMVECTOR normal = XMLoadFloat3(&pWeightArray_[i].normalOrigin);
+			XMStoreFloat3(&pVertexData_[i].position, XMVector3TransformCoord(pos, matrix));
+			XMStoreFloat3(&pVertexData_[i].normal, XMVector3TransformNormal(normal, matrix));
 	}
 
-	// GPUへ転送
 	D3D11_MAPPED_SUBRESOURCE msr = {};
-
+	
 	Direct3D::pContext_->Map(pVertexBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
-
-	if (msr.pData)
-	{
-		memcpy_s(msr.pData, msr.RowPitch, pVertexData_, sizeof(VERTEX) * vertexCount_);
-
-		Direct3D::pContext_->Unmap(pVertexBuffer_, 0);
-	}
+	memcpy(msr.pData, pVertexData_, sizeof(VERTEX) * vertexCount_);
+	Direct3D::pContext_->Unmap(pVertexBuffer_, 0);
 
 	Draw(transform);
 }

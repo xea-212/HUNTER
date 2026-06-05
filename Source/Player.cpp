@@ -22,8 +22,8 @@ void Player::Initialize()
 	SetParameter("PlayerParam");
 
 	animator = Instantiate<Animator>(this);
-	animator->SetModel(hModel_);
 	animator->AttachAnimation("PlayerAnim");
+	animator->Play(0); // 待機アニメーション
 }
 
 void Player::Update()
@@ -66,7 +66,7 @@ void Player::Update()
 void Player::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_);
+	Model::Draw(hModel_, animator->GetAnimHandle(), animator->GetTime());
 }
 
 void Player::Release()
@@ -99,15 +99,11 @@ void Player::Free()
 	if(Input::IsKey(DIK_W)) {
 		moveZ += param_.speed_;
 	}
-	if(Input::IsKey(DIK_S)) {
+	if (Input::IsKey(DIK_S)) {
 		moveZ -= param_.speed_;
 	}
 	if(Input::IsKey(DIK_D)) {
 		moveX += param_.speed_;
-	}
-	// どのキーも押されてない
-	if (moveX == 0.0f && moveZ == 0.0f) {
-		animator->Play(0); // 待機アニメーション
 	}
 
 	// 入力時のみ
