@@ -77,5 +77,4 @@ public:
 	//画像サイズの取得
 	//戻値：画像サイズ
 	XMFLOAT3 GetTextureSize() {	return pTexture_->GetSize();}
-
 };

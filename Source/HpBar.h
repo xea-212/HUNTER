@@ -1,6 +1,7 @@
 #pragma once
 #include "UI.h"
 #include "Player.h"
+#include "../Engine/Sprite.h"
 
 class HpBar : public UI
 {
@@ -17,6 +18,7 @@ public:
 	void Release() override;
 private:
 	Player* player_;
+	Sprite* sprite_;
 
 	int hp_;
 	int maxHp_;
