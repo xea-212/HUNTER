@@ -36,6 +36,9 @@
     <Filter Include="03Scene\Result">
       <UniqueIdentifier>{41e748a9-e806-4d61-998c-b252940bfe6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04UI">
+      <UniqueIdentifier>{1b81cb55-0e89-4067-8589-55d2373f83a9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -116,9 +119,6 @@
     <ClCompile Include="Source\ResultScene.cpp">
       <Filter>03Scene\Result</Filter>
     </ClCompile>
-    <ClCompile Include="Source\TitleUI.cpp">
-      <Filter>03Scene\Title</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Sky.cpp">
       <Filter>03Scene\Play</Filter>
     </ClCompile>
@@ -139,6 +139,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Time.cpp">
       <Filter>01Engine\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI.cpp">
+      <Filter>04UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HpBar.cpp">
+      <Filter>04UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -220,9 +226,6 @@
     <ClInclude Include="Source\ResultScene.h">
       <Filter>03Scene\Result</Filter>
     </ClInclude>
-    <ClInclude Include="Source\TitleUI.h">
-      <Filter>03Scene\Title</Filter>
-    </ClInclude>
     <ClInclude Include="Source\StageManager.h">
       <Filter>03Scene\Play</Filter>
     </ClInclude>
@@ -243,6 +246,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Time.h">
       <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI.h">
+      <Filter>04UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HpBar.h">
+      <Filter>04UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

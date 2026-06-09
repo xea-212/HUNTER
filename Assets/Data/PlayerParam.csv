@@ -1,6 +1,6 @@
 Player,
 hp,100
 power,10
-speed ,0.1
+speed ,0.3
 velocity,0.2
 gravity,-0.03

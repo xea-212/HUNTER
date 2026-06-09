@@ -1,7 +1,7 @@
 #include "TitleScene.h"
 #include "../Engine/SceneManager.h"
+#include "../Engine/Camera.h"
 #include "../Engine/Input.h"
-#include "TitleUI.h"
 
 //コンストラクタ
 TitleScene::TitleScene(GameObject * parent)
@@ -12,7 +12,7 @@ TitleScene::TitleScene(GameObject * parent)
 //初期化
 void TitleScene::Initialize()
 {
-	Instantiate<TitleUI>(this);
+	Camera::SetEnableControl(false);
 }
 
 //更新

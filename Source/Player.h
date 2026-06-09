@@ -18,6 +18,15 @@ enum PlayerParameter
 	PLAYER_GRAVITY,
 };
 
+enum PlayerAnimID
+{
+	ANIM_IDLE = 0,
+	ANIM_WALK,
+	ANIM_RUN,
+	ANIM_ATTACK_MAIN,
+	ANIM_ATTACK_SUB,
+};
+
 class Player : public GameObject
 {
 public:
@@ -40,6 +49,7 @@ public:
 	void Attack();
 
 	int GetHP() { return param_.hp_; } // 体力を取得
+	int GetMaxHP() { return maxHP; } // 最大体力を取得
 	int GetPower() { return param_.power_; } // 攻撃力を取得
 	int Damage(int damage) { param_.hp_ -= damage; return param_.hp_; } // ダメージを受ける（体力を減らす）関数。引数はダメージ量。戻り値は現在の体力。
 	int Heal(int heal) { param_.hp_ += heal; return param_.hp_; } // 回復する（体力を増やす）関数。引数は回復量。戻り値は現在の体力。
@@ -58,7 +68,11 @@ private:
 		XMVECTOR velocity_; // 速度
 	};
 	PlayerParam param_; // プレイヤーのパラメーター
+	int maxHP; // プレイヤーの最大体力
+
 	Animator* animator; // アニメーター
 	
 	XMVECTOR vPos; // プレイヤーの位置
+
+	bool isRun; // プレイヤーが走っているかどうか
 };

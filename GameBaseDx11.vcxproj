@@ -151,14 +151,15 @@
     <ClCompile Include="Engine\Transform.cpp" />
     <ClCompile Include="Source\Animator.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
+    <ClCompile Include="Source\HpBar.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\PlayScene.cpp" />
+    <ClCompile Include="Source\UI.cpp" />
     <ClCompile Include="Source\ResultScene.cpp" />
     <ClCompile Include="Source\Sky.cpp" />
     <ClCompile Include="Source\StageManager.cpp" />
     <ClCompile Include="Source\StageObject.cpp" />
     <ClCompile Include="Source\TitleScene.cpp" />
-    <ClCompile Include="Source\TitleUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio.h" />
@@ -187,14 +188,15 @@
     <ClInclude Include="Engine\Transform.h" />
     <ClInclude Include="Source\Animator.h" />
     <ClInclude Include="Source\Enemy.h" />
+    <ClInclude Include="Source\HpBar.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\PlayScene.h" />
+    <ClInclude Include="Source\UI.h" />
     <ClInclude Include="Source\ResultScene.h" />
     <ClInclude Include="Source\Sky.h" />
     <ClInclude Include="Source\StageManager.h" />
     <ClInclude Include="Source\StageObject.h" />
     <ClInclude Include="Source\TitleScene.h" />
-    <ClInclude Include="Source\TitleUI.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\BillBoard.hlsl">

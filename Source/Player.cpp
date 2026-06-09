@@ -9,7 +9,7 @@
 #include "../Engine/Time.h"
 
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), hModel_(-1)
+	:GameObject(parent, "Player"), hModel_(-1), isRun(false)
 {
 }
 
@@ -23,7 +23,7 @@ void Player::Initialize()
 
 	animator = Instantiate<Animator>(this);
 	animator->AttachAnimation("PlayerAnim");
-	animator->Play(0); // 待機アニメーション
+	animator->Play(ANIM_IDLE); // 待機アニメーション
 }
 
 void Player::Update()
@@ -65,6 +65,7 @@ void Player::Update()
 
 void Player::Draw()
 {
+
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_, animator->GetAnimHandle(), animator->GetTime());
 }
@@ -86,24 +87,42 @@ void Player::SetParameter(std::string fileName)
 		param_.velocity_ = { 0, csv->GetFloat(PLAYER_VELOCITY, paramColumn), 0 };
 		param_.gravity_ = csv->GetFloat(PLAYER_GRAVITY, paramColumn);
 	}
+	delete csv;
+
+	maxHP = param_.hp_; // 最大体力を設定
 }
 
 void Player::Free()
 {
+	float speed = param_.speed_;
+
+	// Shiftでダッシュ
+	if (Input::IsKey(DIK_LSHIFT))
+	{
+		const float dashMultiplier = 2.0f; // ダッシュ時の速度倍率
+		speed *= dashMultiplier;
+		isRun = true;
+	}
+
 	float moveX = 0.0f;
 	float moveZ = 0.0f;
 
 	if(Input::IsKey(DIK_A)) {
-		moveX -= param_.speed_;
+		moveX -= speed;
 	}
 	if(Input::IsKey(DIK_W)) {
-		moveZ += param_.speed_;
+		moveZ += speed;
 	}
 	if (Input::IsKey(DIK_S)) {
-		moveZ -= param_.speed_;
+		moveZ -= speed;
 	}
 	if(Input::IsKey(DIK_D)) {
-		moveX += param_.speed_;
+		moveX += speed;
+	}
+
+	// マウス左クリックで攻撃
+	if (Input::IsMouseButtonDown(0)) {
+		state = PLAYER_STATE_ATTACK_MAIN;
 	}
 
 	// 入力時のみ
@@ -142,19 +161,26 @@ void Player::Free()
 
 		// 移動
 		vPos += XMVectorSet(
-			dirX * param_.speed_,
+			dirX * speed,
 			0,
-			dirZ * param_.speed_,
+			dirZ * speed,
 			0
 		);
 
-		animator->Play(1); // 移動アニメ
+		if (isRun) {
+			animator->Play(ANIM_RUN); // ダッシュアニメ
+			isRun = false;
+		}
+		else {
+			animator->Play(ANIM_WALK); // 移動アニメ
+		}
 	}
 	else {
-		animator->Play(0); // 待機
+		animator->Play(ANIM_IDLE); // 待機
 	}
 }
 
 void Player::Attack()
 {
+	state = PLAYER_STATE_FREE;
 }

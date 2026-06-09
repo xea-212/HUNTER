@@ -42,7 +42,6 @@ public:
 private:
 	std::vector<AnimationData> anim_; // アニメーションデータのリスト
 
-	int model_; // モデルのハンドル
 	int currentAnim_; // 現在再生中のアニメーションのID
 
 	bool isPlay_; // アニメーションが再生中かどうか

@@ -4,7 +4,7 @@
 #include "../Engine/Model.h"
 
 Animator::Animator(GameObject* parent)
-	:GameObject(parent, "Animator"), model_(-1), currentAnim_(-1), isPlay_(false), time_(0.0f), speed_(1.0f)
+	:GameObject(parent, "Animator"), currentAnim_(-1), isPlay_(false), time_(0.0f), speed_(1.0f)
 {
 }
 
@@ -18,7 +18,8 @@ void Animator::Initialize()
 
 void Animator::Update()
 {
-	if (!isPlay_ || currentAnim_ < 0 || model_ < 0) {
+
+	if (!isPlay_ || currentAnim_ < 0) {
 		return;
 	}
 
@@ -26,9 +27,7 @@ void Animator::Update()
 
 	time_ += Time::DeltaTime() * anim.speed_ * speed_;
 
-	char text[256];
-	sprintf_s(text, "anim time=%f\n", time_);
-	OutputDebugStringA(text);
+	
 
 	if(time_ > anim.endTime_) {
 		if (anim.loop_) {
@@ -63,8 +62,21 @@ void Animator::AttachAnimation(std::string fileName)
 		data.loop_ = csv->GetInt(line, ANIMATION_DATA_LOOP);
 		data.animModel_ = Model::Load(path + data.fileName_ + ".fbx");
 		anim_.push_back(data);
+
+		char text[256];
+		sprintf_s(text,
+			"anim=%s start=%f end=%f loop=%d\n",
+			data.fileName_.c_str(),
+			data.startTime_,
+			data.endTime_,
+			data.loop_);
+		OutputDebugStringA(text);
 	}
 	delete csv;
+
+	char text[256];
+	sprintf_s(text, "Enemy anim count=%d\n", (int)anim_.size());
+	OutputDebugStringA(text);
 }
 
 void Animator::Play(int ID, float speed)

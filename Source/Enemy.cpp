@@ -13,19 +13,21 @@ void Enemy::Initialize()
 	transform_.position_ = { 0.0f, 0.0f, 5.0f };
 	transform_.rotate_ = { 0.0f, 180.0f, 0.0f };
 	transform_.scale_ = { 0.1f, 0.1f, 0.1f };
-	state = ENEMY_STATE_IDLE;
+	state = ENEMY_STATE_FREE;
+
+	animator = Instantiate<Animator>(this);
+	animator->AttachAnimation("EnemyAnim");
+	animator->Play(1); // 待機アニメーション
 }
 
 void Enemy::Update()
 {
 	switch (state) {
-		case ENEMY_STATE_IDLE:
-			break;
-		case ENEMY_STATE_WALK:
-			break;
-		case ENEMY_STATE_JUMP:
+		case ENEMY_STATE_FREE:
+			Free();
 			break;
 		case ENEMY_STATE_ATTACK:
+			Attack();
 			break;
 	}
 }
@@ -33,9 +35,18 @@ void Enemy::Update()
 void Enemy::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_);
+	Model::Draw(hModel_, animator->GetAnimHandle(), animator->GetTime());
 }
 
 void Enemy::Release()
+{
+}
+
+void Enemy::Free()
+{
+	animator->Play(1); // 待機アニメーション
+}
+
+void Enemy::Attack()
 {
 }

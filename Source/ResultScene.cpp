@@ -1,5 +1,6 @@
 #include "ResultScene.h"
 #include "../Engine/SceneManager.h"
+#include "../Engine/Camera.h"
 #include "../Engine/Input.h"
 
 ResultScene::ResultScene(GameObject* parent)
@@ -8,6 +9,7 @@ ResultScene::ResultScene(GameObject* parent)
 
 void ResultScene::Initialize()
 {
+	Camera::SetEnableControl(false);
 }
 
 void ResultScene::Update()

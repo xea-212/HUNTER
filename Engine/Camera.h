@@ -35,4 +35,7 @@ namespace Camera
 	XMMATRIX GetBillboardMatrix();
 
 	float GetYaw(); // カメラの回転角度（Yaw）を取得
+
+	extern bool isMove; // カメラの操作を有効にするかどうか
+	void SetEnableControl(bool enable); // カメラの操作を有効/無効にする関数
 };

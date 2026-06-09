@@ -30,22 +30,25 @@ void Camera::Initialize()
 //更新（ビュー行列作成）
 void Camera::Update()
 {
-	//マウス移動量
-	XMFLOAT3 mouseMove = Input::GetMouseMove();
+	if (isMove)
+	{
+		//マウス移動量
+		XMFLOAT3 mouseMove = Input::GetMouseMove();
 
-	float sensitivity = 0.005f; // マウス感度
+		float sensitivity = 0.005f; // マウス感度
 
-	yaw += mouseMove.x * sensitivity; // Yawを更新
-	pitch += mouseMove.y * sensitivity; // Pitchを更新
+		yaw += mouseMove.x * sensitivity; // Yawを更新
+		pitch += mouseMove.y * sensitivity; // Pitchを更新
 
-	// ピッチの制限
-	constexpr float maxPitch = XMConvertToRadians(89.0f); // ピッチの最大
-	constexpr float minPitch = XMConvertToRadians(5.0f); // ピッチの最小
-	if (pitch > maxPitch) {
-		pitch = maxPitch;
-	}
-	if (pitch < minPitch) {
-		pitch = minPitch;
+		// ピッチの制限
+		constexpr float maxPitch = XMConvertToRadians(89.0f); // ピッチの最大
+		constexpr float minPitch = XMConvertToRadians(5.0f); // ピッチの最小
+		if (pitch > maxPitch) {
+			pitch = maxPitch;
+		}
+		if (pitch < minPitch) {
+			pitch = minPitch;
+		}
 	}
 
 	// カメラの位置を更新
@@ -87,3 +90,6 @@ XMMATRIX Camera::GetProjectionMatrix() { return _proj; }
 XMMATRIX Camera::GetBillboardMatrix(){	return _billBoard; }
 
 float Camera::GetYaw(){ return yaw; }
+
+bool Camera::isMove = false; // カメラの操作を有効にするかどうか
+void Camera::SetEnableControl(bool enable){ isMove = enable; }
