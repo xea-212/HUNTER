@@ -8,8 +8,8 @@ public:
 	struct AnimationData
 	{
 		std::string fileName_; // アニメーションのファイル名
-		float startTime_; // アニメーションの開始時間
-		float endTime_; // アニメーションの終了時間
+		float startFrame_; // アニメーションの開始フレーム
+		float endFrame_; // アニメーションの終了フレーム
 		float speed_; // アニメーションの速度
 		bool loop_; // アニメーションをループさせるかどうか
 
@@ -37,8 +37,9 @@ public:
 	void Play(int ID, float speed = 1.0f); // アニメーションを再生する関数
 	void Stop(); // アニメーションを停止する関数
 	int GetAnimHandle(); // 現在再生中のアニメーションのモデルのハンドルを取得する関数
+	bool IsPlaying(); // アニメーションが再生中かどうかを取得する関数
 
-	float GetTime(); // 現在のアニメーションの再生時間を取得する関数
+	float GetFrame(); // 現在のアニメーションの再生フレームを取得する関数
 private:
 	std::vector<AnimationData> anim_; // アニメーションデータのリスト
 
@@ -46,6 +47,6 @@ private:
 
 	bool isPlay_; // アニメーションが再生中かどうか
 
-	float time_; // アニメーションの再生時間
+	float frame_; // アニメーションの再生時間
 	float speed_; // アニメーションの再生速度
 };

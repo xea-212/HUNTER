@@ -151,7 +151,6 @@
     <ClCompile Include="Engine\Transform.cpp" />
     <ClCompile Include="Source\Animator.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
-    <ClCompile Include="Source\HpBar.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\PlayScene.cpp" />
     <ClCompile Include="Source\UI.cpp" />
@@ -188,7 +187,6 @@
     <ClInclude Include="Engine\Transform.h" />
     <ClInclude Include="Source\Animator.h" />
     <ClInclude Include="Source\Enemy.h" />
-    <ClInclude Include="Source\HpBar.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\PlayScene.h" />
     <ClInclude Include="Source\UI.h" />

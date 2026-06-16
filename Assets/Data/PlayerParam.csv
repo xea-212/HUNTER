@@ -1,6 +1,9 @@
-Player,
-hp,100
-power,10
-speed ,0.3
-velocity,0.2
-gravity,-0.03
+Player,,,
+position,0,0,-50
+rotate,0,0,0
+scalse,0.05,0.05,0.05
+hp,100,,
+power,10,,
+speed ,0.3,,
+velocity,0.2,,
+gravity,-0.03,,

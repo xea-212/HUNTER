@@ -161,10 +161,10 @@ void Fbx::Draw(Transform& transform, int frame)
 	}
 }
 
-void Fbx::Draw(Transform& transform, Fbx* animFbx, float animationTime)
+void Fbx::Draw(Transform& transform, Fbx* animFbx, float animationFrame)
 {
 	FbxTime time;
-	time.SetSecondDouble(animationTime);
+	time.SetFrame(animationFrame, _frameRate);
 
 	for (int i = 0; i < parts_.size(); i++)
 	{

@@ -40,6 +40,7 @@ public:
 	void Attack();
 private:
 	int hModel_;
+	float distance;
 	EnemyState state;
 
 	struct EnemyParam{
@@ -50,4 +51,8 @@ private:
 	EnemyParam param_;
 
 	Animator* animator;
+
+	Transform pPos; // プレイヤーの位置を保存する変数
+
+	bool isAttack; // 攻撃中かどうかのフラグ
 };

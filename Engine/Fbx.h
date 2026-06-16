@@ -74,7 +74,7 @@ public:
 	//描画
 	//引数：World	ワールド行列
 	void Draw(Transform& transform, int frame);
-	void Draw(Transform& transform, Fbx* animFbx, float animationTime);
+	void Draw(Transform& transform, Fbx* animFbx, float animationFrame);
 
 	//解放
 	void    Release();

@@ -4,7 +4,7 @@
 #include "../Engine/Model.h"
 
 Animator::Animator(GameObject* parent)
-	:GameObject(parent, "Animator"), currentAnim_(-1), isPlay_(false), time_(0.0f), speed_(1.0f)
+	:GameObject(parent, "Animator"), currentAnim_(-1), isPlay_(false), frame_(0.0f), speed_(1.0f)
 {
 }
 
@@ -25,16 +25,15 @@ void Animator::Update()
 
 	AnimationData& anim = anim_[currentAnim_];
 
-	time_ += Time::DeltaTime() * anim.speed_ * speed_;
+	const float animFps = 30.0f; // アニメーションのフレームレート
+	frame_ += animFps * Time::DeltaTime() * anim.speed_ * speed_;
 
-	
-
-	if(time_ > anim.endTime_) {
-		if (anim.loop_) {
-			time_ = anim.startTime_;
+	if(frame_ > anim.endFrame_) {
+		if (anim.loop_ == 1) {
+			frame_ = anim.startFrame_;
 		} 
 		else {
-			time_ = anim.endTime_;
+			frame_ = anim.endFrame_;
 			isPlay_ = false;
 		}
 	}
@@ -56,32 +55,19 @@ void Animator::AttachAnimation(std::string fileName)
 	for (int line = 0; line < csv->GetLines(); line++) {
 		AnimationData data;
 		data.fileName_ = csv->GetString(line, ANIMATION_DATA_FILENAME);
-		data.startTime_ = csv->GetFloat(line, ANIMATION_DATA_STARTTIME);
-		data.endTime_ = csv->GetFloat(line, ANIMATION_DATA_ENDTIME);
+		data.startFrame_ = csv->GetFloat(line, ANIMATION_DATA_STARTTIME);
+		data.endFrame_ = csv->GetFloat(line, ANIMATION_DATA_ENDTIME);
 		data.speed_ = csv->GetFloat(line, ANIMATION_DATA_SPEED);
 		data.loop_ = csv->GetInt(line, ANIMATION_DATA_LOOP);
 		data.animModel_ = Model::Load(path + data.fileName_ + ".fbx");
 		anim_.push_back(data);
-
-		char text[256];
-		sprintf_s(text,
-			"anim=%s start=%f end=%f loop=%d\n",
-			data.fileName_.c_str(),
-			data.startTime_,
-			data.endTime_,
-			data.loop_);
-		OutputDebugStringA(text);
 	}
 	delete csv;
-
-	char text[256];
-	sprintf_s(text, "Enemy anim count=%d\n", (int)anim_.size());
-	OutputDebugStringA(text);
 }
 
 void Animator::Play(int ID, float speed)
 {
-	if (ID < 0 || ID >= anim_.size()){
+	if (ID < 0 || ID >= static_cast<int>(anim_.size())){
 		return;
 	}
 
@@ -91,9 +77,10 @@ void Animator::Play(int ID, float speed)
 
 	currentAnim_ = ID;
 	speed_ = speed;
-	time_ = anim_[ID].startTime_;
+	frame_ = anim_[ID].startFrame_;
 	isPlay_ = true;
 }
+
 void Animator::Stop()
 {
 	isPlay_ = false;
@@ -108,7 +95,12 @@ int Animator::GetAnimHandle()
 	return anim_[currentAnim_].animModel_;
 }
 
-float Animator::GetTime()
+bool Animator::IsPlaying()
 {
-	return time_;
+	return isPlay_;
+}
+
+float Animator::GetFrame()
+{
+	return frame_;
 }

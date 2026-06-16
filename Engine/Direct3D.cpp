@@ -397,7 +397,7 @@ namespace Direct3D
 	void SetBlendMode(BLEND_MODE blendMode)
 	{
 		//加算合成
-		float blendFactor[4] = { D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO };
+		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 		pContext_->OMSetBlendState(pBlendState[blendMode], blendFactor, 0xffffffff);
 		
 		//Zバッファへの書き込み

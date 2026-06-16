@@ -11,7 +11,10 @@ enum PlayerState
 
 enum PlayerParameter
 {
-	PLAYER_HP = 1,
+	PLAYER_POSITION = 1,
+	PLAYER_ROTATE,
+	PLAYER_SCALE,
+	PLAYER_HP,
 	PLAYER_POWER,
 	PLAYER_SPEED,
 	PLAYER_VELOCITY,
@@ -25,6 +28,19 @@ enum PlayerAnimID
 	ANIM_RUN,
 	ANIM_ATTACK_MAIN,
 	ANIM_ATTACK_SUB,
+};
+
+enum column
+{
+	COLUMN_POSITION_X = 1,
+	COLUMN_POSITION_Y,
+	COLUMN_POSITION_Z,
+	COLUMN_ROTATE_X = 1,
+	COLUMN_ROTATE_Y,
+	COLUMN_ROTATE_Z,
+	COLUMN_SCALE_X = 1,
+	COLUMN_SCALE_Y,
+	COLUMN_SCALE_Z,
 };
 
 class Player : public GameObject
@@ -48,6 +64,7 @@ public:
 	//攻撃
 	void Attack();
 
+	Transform GetTransform() { return transform_; } // プレイヤーのTransformを取得
 	int GetHP() { return param_.hp_; } // 体力を取得
 	int GetMaxHP() { return maxHP; } // 最大体力を取得
 	int GetPower() { return param_.power_; } // 攻撃力を取得
@@ -75,4 +92,5 @@ private:
 	XMVECTOR vPos; // プレイヤーの位置
 
 	bool isRun; // プレイヤーが走っているかどうか
+	bool isAttack; // プレイヤーが攻撃しているかどうか
 };

@@ -9,14 +9,13 @@
 #include "../Engine/Time.h"
 
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), hModel_(-1), isRun(false)
+	:GameObject(parent, "Player"), hModel_(-1), isRun(false), isAttack(false)
 {
 }
 
 void Player::Initialize()
 {
 	hModel_ = Model::Load("Model/Character/Player.fbx");
-	transform_.scale_ = { 0.05f, 0.05f, 0.05f };
 	state = PLAYER_STATE_FREE;
 
 	SetParameter("PlayerParam");
@@ -53,7 +52,9 @@ void Player::Update()
 	int hGoundModel = sObj->getModelhundle();
 
 	RayCastData data;
-	data.start = {0, transform_.position_.y + 5.0f, 0};
+	data.start = transform_.position_;
+	const float topOffset = 100.0f;
+	data.start.y = transform_.position_.y + topOffset; // プレイヤーの頭上からレイを発射
 
 	data.dir = { 0, -1, 0 };
 	Model::RayCast(hGoundModel, &data);
@@ -67,7 +68,7 @@ void Player::Draw()
 {
 
 	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_, animator->GetAnimHandle(), animator->GetTime());
+	Model::Draw(hModel_, animator->GetAnimHandle(), animator->GetFrame());
 }
 
 void Player::Release()
@@ -81,6 +82,9 @@ void Player::SetParameter(std::string fileName)
 
 	constexpr int paramColumn = 1; // パラメーターの列番号
 	for (int line = 0; line < csv->GetLines(); line++) {
+		transform_.position_ = { csv->GetFloat(PLAYER_POSITION, COLUMN_POSITION_X), csv->GetFloat(PLAYER_POSITION, COLUMN_POSITION_Y), csv->GetFloat(PLAYER_POSITION, COLUMN_POSITION_Z) };
+		transform_.rotate_ = { csv->GetFloat(PLAYER_ROTATE, COLUMN_ROTATE_X), csv->GetFloat(PLAYER_ROTATE, COLUMN_ROTATE_Y), csv->GetFloat(PLAYER_ROTATE, COLUMN_ROTATE_Z) };
+		transform_.scale_ = { csv->GetFloat(PLAYER_SCALE, COLUMN_SCALE_X), csv->GetFloat(PLAYER_SCALE, COLUMN_SCALE_Y), csv->GetFloat(PLAYER_SCALE, COLUMN_SCALE_Z) };
 		param_.hp_ = csv->GetInt(PLAYER_HP, paramColumn);
 		param_.power_ = csv->GetInt(PLAYER_POWER, paramColumn);
 		param_.speed_ = csv->GetFloat(PLAYER_SPEED, paramColumn);
@@ -123,6 +127,7 @@ void Player::Free()
 	// マウス左クリックで攻撃
 	if (Input::IsMouseButtonDown(0)) {
 		state = PLAYER_STATE_ATTACK_MAIN;
+		isAttack = true;
 	}
 
 	// 入力時のみ
@@ -182,5 +187,12 @@ void Player::Free()
 
 void Player::Attack()
 {
-	state = PLAYER_STATE_FREE;
+	if (isAttack) {
+		animator->Play(ANIM_ATTACK_MAIN); // 攻撃アニメ
+		
+		isAttack = false;
+	}
+	if(!animator->IsPlaying()) {
+		state = PLAYER_STATE_FREE; // 攻撃アニメが終わったら通常状態に戻す
+	}
 }

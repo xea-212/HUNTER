@@ -143,9 +143,6 @@
     <ClCompile Include="Source\UI.cpp">
       <Filter>04UI</Filter>
     </ClCompile>
-    <ClCompile Include="Source\HpBar.cpp">
-      <Filter>04UI</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -248,9 +245,6 @@
       <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI.h">
-      <Filter>04UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\HpBar.h">
       <Filter>04UI</Filter>
     </ClInclude>
   </ItemGroup>

@@ -61,7 +61,7 @@ namespace Model
 	//引数：matrix	ワールド行列
 	void Draw(int handle);
 
-	void Draw(int modelHandle, int animHandle, float animationTime);
+	void Draw(int modelHandle, int animHandle, float animationFrame);
 
 	//任意のモデルを開放
 	//引数：handle	開放したいモデルの番号

@@ -7,7 +7,6 @@
 #include "Enemy.h"
 #include "StageObject.h"
 #include "StageManager.h"
-#include "HpBar.h"
 
 PlayScene::PlayScene(GameObject* parent)
 {
@@ -23,7 +22,6 @@ void PlayScene::Initialize()
 	Instantiate<Sky>(this);
 	Instantiate<StageManager>(this);
 	Instantiate<StageObject>(this);
-	Instantiate<HpBar>(this);
 }
 
 void PlayScene::Update()
