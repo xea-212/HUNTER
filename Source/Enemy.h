@@ -4,8 +4,12 @@
 
 enum EnemyState
 {
-	ENEMY_STATE_FREE,
+	ENEMY_STATE_IDLE,
+	ENEMY_STATE_FIND,
+	ENEMY_STATE_CHASE,
 	ENEMY_STATE_ATTACK,
+	ENEMYSTATE_COOLDOWN,
+	ENEMY_STATE_DAMAGE
 };
 
 enum EnemyParameter
@@ -36,8 +40,12 @@ public:
 	//開放
 	void Release() override;
 
-	void Free();
+	void Idle();
+	void Find();
+	void Chase();
 	void Attack();
+	void Cooldown();
+	void Damage();
 private:
 	int hModel_;
 	float distance;

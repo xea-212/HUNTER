@@ -1,4 +1,9 @@
 EDunce,0,5,1,1
-EIdle,0,300,1,1
-EWalk,0,2,1,1
-EJumpAttack,0,2,1,1
+EIdle,0,428,1,1
+EWalk,0,44,1,1
+EJumpAttack,0,115,1,1
+EFlex,0,141,1,0
+EDRun,0,20,1,1
+ERun,0,27,1,1
+ERoar,0,163,1,0
+ESwip,0,81,1,0

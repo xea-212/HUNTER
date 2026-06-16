@@ -14,7 +14,7 @@ void Enemy::Initialize()
 	transform_.position_ = { 0.0f, 0.0f, 5.0f };
 	transform_.rotate_ = { 0.0f, 180.0f, 0.0f };
 	transform_.scale_ = { 0.1f, 0.1f, 0.1f };
-	state = ENEMY_STATE_FREE;
+	state = ENEMY_STATE_IDLE;
 
 	animator = Instantiate<Animator>(this);
 	animator->AttachAnimation("EnemyAnim");
@@ -24,11 +24,23 @@ void Enemy::Initialize()
 void Enemy::Update()
 {
 	switch (state) {
-		case ENEMY_STATE_FREE:
-			Free();
+		case ENEMY_STATE_IDLE:
+			Idle();
+			break;
+		case ENEMY_STATE_FIND:
+			Find();
+			break;
+		case ENEMY_STATE_CHASE:
+			Chase();
 			break;
 		case ENEMY_STATE_ATTACK:
 			Attack();
+			break;
+		case ENEMYSTATE_COOLDOWN:
+			Cooldown();
+			break;
+		case ENEMY_STATE_DAMAGE:
+			Damage();
 			break;
 	}
 
@@ -51,22 +63,26 @@ void Enemy::Release()
 {
 }
 
-void Enemy::Free()
+void Enemy::Idle()
 {
-	if (distance < 3.0f) {
-		state = ENEMY_STATE_ATTACK;
-	}
-	else if (distance < 30.0f) {
-		animator->Play(ENEMY_ANIM_WALK); // 歩きアニメーション
-	}
-	else {
-		animator->Play(ENEMY_ANIM_IDLE); // 待機アニメーション
-	}
+}
 
+void Enemy::Find()
+{
+}
 
+void Enemy::Chase()
+{
 }
 
 void Enemy::Attack()
 {
-	state = ENEMY_STATE_FREE;
+}
+
+void Enemy::Cooldown()
+{
+}
+
+void Enemy::Damage()
+{
 }
