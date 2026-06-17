@@ -1,0 +1,9 @@
+Enemy			
+position	0	0	5
+rotate	0	180	0
+scale	0.1	0.1	0.1
+hp	1000		
+power	50		
+speed	0.2		
+velocity	0.2		
+gravity	-0.03		

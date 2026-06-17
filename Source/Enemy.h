@@ -12,18 +12,16 @@ enum EnemyState
 	ENEMY_STATE_DAMAGE
 };
 
-enum EnemyParameter
-{
-	ENEMY_HP = 1,
-	ENEMY_POWER,
-	ENEMY_SPEED,
-};
-
 enum EnemyAnimID
 {
 	ENEMY_ANIM_IDLE = 1,
 	ENEMY_ANIM_WALK,
-	ENEMY_ANIM_ATTACK,
+	ENEMY_ANIM_JATTACK,
+	ENEMY_ANIM_FLEX,
+	ENEMY_ANIM_DRUN,
+	ENEMY_ANIM_RUN,
+	ENEMY_ANIM_ROAR,
+	ENEMY_ANIM_SWIP
 };
 
 class Enemy : public GameObject
@@ -40,6 +38,9 @@ public:
 	//開放
 	void Release() override;
 
+	void SetParameter(std::string fileName);
+	void UpdatePlayerInfo();
+
 	void Idle();
 	void Find();
 	void Chase();
@@ -48,13 +49,22 @@ public:
 	void Damage();
 private:
 	int hModel_;
-	float distance;
+
+	float dx_;
+	float dz_;
+	float distance_;
+
+	float timer_; // クールダウン時間を管理する変数
+
 	EnemyState state;
 
 	struct EnemyParam{
 		int hp_;
 		int power_;
 		float speed_;
+
+		float gravity_;
+		XMVECTOR velocity_;
 	};
 	EnemyParam param_;
 

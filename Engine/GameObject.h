@@ -12,6 +12,18 @@
 
 using namespace DirectX;
 
+enum Column
+{
+	COLUMN_POSITION_X = 1,
+	COLUMN_POSITION_Y,
+	COLUMN_POSITION_Z,
+	COLUMN_ROTATE_X = 1,
+	COLUMN_ROTATE_Y,
+	COLUMN_ROTATE_Z,
+	COLUMN_SCALE_X = 1,
+	COLUMN_SCALE_Y,
+	COLUMN_SCALE_Z,
+};
 
 //-----------------------------------------------------------
 //全てのゲームオブジェクト（シーンも含めて）が継承するインターフェース

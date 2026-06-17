@@ -1,28 +1,32 @@
 #include "Enemy.h"
 #include "../Engine/Model.h"
 #include "../Engine/Direct3D.h"
+#include "../Engine/Time.h"
+#include "../Engine/CsvReader.h"
 #include "Player.h"
 
 Enemy::Enemy(GameObject* parent)
-	:GameObject(parent, "Enemy"), hModel_(-1), pPos{}, isAttack(false), distance(0.0f)
+	:GameObject(parent, "Enemy"), hModel_(-1), pPos{}, isAttack(false), dx_(0), dz_(0), distance_(0), timer_(0)
 {
 }
 
 void Enemy::Initialize()
 {
 	hModel_ = Model::Load("Model/Character/Enemy.fbx");
-	transform_.position_ = { 0.0f, 0.0f, 5.0f };
-	transform_.rotate_ = { 0.0f, 180.0f, 0.0f };
-	transform_.scale_ = { 0.1f, 0.1f, 0.1f };
 	state = ENEMY_STATE_IDLE;
 
 	animator = Instantiate<Animator>(this);
 	animator->AttachAnimation("EnemyAnim");
-	animator->Play(1); // 待機アニメーション
+	animator->Play(ENEMY_ANIM_IDLE); // 待機アニメーション
 }
 
 void Enemy::Update()
 {
+	Player* player = (Player*)GetParent()->FindChildObject("Player");
+	pPos = player->GetTransform();
+
+	UpdatePlayerInfo();
+
 	switch (state) {
 		case ENEMY_STATE_IDLE:
 			Idle();
@@ -44,13 +48,6 @@ void Enemy::Update()
 			break;
 	}
 
-	Player* player = (Player*)GetParent()->FindChildObject("Player");
-	pPos = player->GetTransform();
-
-	float dx = pPos.position_.x - transform_.position_.x;
-	float dz = pPos.position_.z - transform_.position_.z;
-
-	distance = sqrtf(dx * dx + dz * dz);
 }
 
 void Enemy::Draw()
@@ -63,12 +60,39 @@ void Enemy::Release()
 {
 }
 
+void Enemy::SetParameter(std::string fileName)
+{
+	std::string path = "Data/";
+	CsvReader* csv = new CsvReader(path + fileName + ".csv");
+
+	constexpr int paramColumn = 1; // パラメーターの列番号
+	for (int line = 0; line < csv->GetLines(); line++) {
+		transform_.position_ = { csv->GetFloat(PLAYER_POSITION, COLUMN_POSITION_X), csv->GetFloat(PLAYER_POSITION, COLUMN_POSITION_Y), csv->GetFloat(PLAYER_POSITION, COLUMN_POSITION_Z) };
+		transform_.rotate_ = { csv->GetFloat(PLAYER_ROTATE, COLUMN_ROTATE_X), csv->GetFloat(PLAYER_ROTATE, COLUMN_ROTATE_Y), csv->GetFloat(PLAYER_ROTATE, COLUMN_ROTATE_Z) };
+		transform_.scale_ = { csv->GetFloat(PLAYER_SCALE, COLUMN_SCALE_X), csv->GetFloat(PLAYER_SCALE, COLUMN_SCALE_Y), csv->GetFloat(PLAYER_SCALE, COLUMN_SCALE_Z) };
+		param_.hp_ = csv->GetInt(PLAYER_HP, paramColumn);
+		param_.power_ = csv->GetInt(PLAYER_POWER, paramColumn);
+		param_.speed_ = csv->GetFloat(PLAYER_SPEED, paramColumn);
+		param_.velocity_ = { 0, csv->GetFloat(PLAYER_VELOCITY, paramColumn), 0 };
+		param_.gravity_ = csv->GetFloat(PLAYER_GRAVITY, paramColumn);
+	}
+	delete csv;
+}
+
+void Enemy::UpdatePlayerInfo()
+{
+	dx_ = pPos.position_.x - transform_.position_.x;
+	dz_ = pPos.position_.z - transform_.position_.z;
+	distance_ = sqrtf(dx_ * dx_ + dz_ * dz_);
+}
+
 void Enemy::Idle()
 {
 }
 
 void Enemy::Find()
 {
+
 }
 
 void Enemy::Chase()
@@ -81,8 +105,15 @@ void Enemy::Attack()
 
 void Enemy::Cooldown()
 {
+	timer_ += Time::DeltaTime();
+
+	const float cooldownDuration = 2.0f; // クールダウン時間（秒）
+	if (timer_ >= cooldownDuration) {
+		timer_ = 0; // タイマーをリセット
+		state = ENEMY_STATE_FIND; // 再びプレイヤーを探す状態に遷移
+	}
 }
 
 void Enemy::Damage()
-{
+{	
 }
