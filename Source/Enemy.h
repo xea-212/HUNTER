@@ -8,7 +8,7 @@ enum EnemyState
 	ENEMY_STATE_FIND,
 	ENEMY_STATE_CHASE,
 	ENEMY_STATE_ATTACK,
-	ENEMYSTATE_COOLDOWN,
+	ENEMY_STATE_COOLDOWN,
 	ENEMY_STATE_DAMAGE
 };
 
@@ -40,6 +40,7 @@ public:
 
 	void SetParameter(std::string fileName);
 	void UpdatePlayerInfo();
+	bool CanSeePlayer();
 
 	void Idle();
 	void Find();
@@ -52,6 +53,8 @@ private:
 
 	float dx_;
 	float dz_;
+	float dirX_;
+	float dirZ_;
 	float distance_;
 
 	float timer_; // クールダウン時間を管理する変数
@@ -72,5 +75,9 @@ private:
 
 	Transform pPos; // プレイヤーの位置を保存する変数
 
+	int attackID_; // 攻撃アニメーションのID
 	bool isAttack; // 攻撃中かどうかのフラグ
+	bool isAttackSelect;
+
+	bool isFlex; 
 };

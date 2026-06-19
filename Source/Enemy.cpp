@@ -4,9 +4,11 @@
 #include "../Engine/Time.h"
 #include "../Engine/CsvReader.h"
 #include "Player.h"
+#include "StageObject.h"
 
 Enemy::Enemy(GameObject* parent)
-	:GameObject(parent, "Enemy"), hModel_(-1), pPos{}, isAttack(false), dx_(0), dz_(0), distance_(0), timer_(0)
+	:GameObject(parent, "Enemy"), hModel_(-1), pPos{}, isAttack(false), dx_(0), dz_(0), distance_(0), timer_(0), isFlex(false)
+	, isAttackSelect(0), attackID_(0)
 {
 }
 
@@ -14,6 +16,8 @@ void Enemy::Initialize()
 {
 	hModel_ = Model::Load("Model/Character/Enemy.fbx");
 	state = ENEMY_STATE_IDLE;
+
+	SetParameter("EnemyParam");
 
 	animator = Instantiate<Animator>(this);
 	animator->AttachAnimation("EnemyAnim");
@@ -40,7 +44,7 @@ void Enemy::Update()
 		case ENEMY_STATE_ATTACK:
 			Attack();
 			break;
-		case ENEMYSTATE_COOLDOWN:
+		case ENEMY_STATE_COOLDOWN:
 			Cooldown();
 			break;
 		case ENEMY_STATE_DAMAGE:
@@ -48,6 +52,20 @@ void Enemy::Update()
 			break;
 	}
 
+	StageObject* sObj = (StageObject*)GetParent()->FindChildObject("StageObject");
+	int hGoundModel = sObj->getModelhundle();
+
+	RayCastData data;
+	data.start = transform_.position_;
+	const float topOffset = 100.0f;
+	data.start.y = transform_.position_.y + topOffset; // プレイヤーの頭上からレイを発射
+
+	data.dir = { 0, -1, 0 };
+	Model::RayCast(hGoundModel, &data);
+
+	if (data.hit) {
+		transform_.position_.y = data.start.y - data.dist;
+	}
 }
 
 void Enemy::Draw()
@@ -83,24 +101,93 @@ void Enemy::UpdatePlayerInfo()
 {
 	dx_ = pPos.position_.x - transform_.position_.x;
 	dz_ = pPos.position_.z - transform_.position_.z;
+
+	dirX_ = dx_ / distance_;
+	dirZ_ = dz_ / distance_;
+
 	distance_ = sqrtf(dx_ * dx_ + dz_ * dz_);
+}
+
+bool Enemy::CanSeePlayer()
+{
+	if (distance_ > 40.0f) { // プレイヤーが40ユニット以内にいる場合
+		return false;
+	}
+	if (distance_ <= 0.001f) {
+		return true; // プレイヤーと敵がほぼ同じ位置にいる場合も見えるとする
+	}
+
+	float rad = XMConvertToRadians(transform_.rotate_.y);
+
+	float forwardX = sinf(rad);
+	float forwardZ = cosf(rad);
+
+	float dot = forwardX * dirX_ + forwardZ * dirZ_;
+
+	return dot > cosf(XMConvertToRadians(60.0f)); // 視野角60度以内にプレイヤーがいるかどうかを判定
 }
 
 void Enemy::Idle()
 {
+	animator->Play(ENEMY_ANIM_IDLE); // 待機アニメーション
+	if (CanSeePlayer()) {
+		isFlex = true; // プレイヤーを見つけたフラグを立てる
+		state = ENEMY_STATE_FIND; // プレイヤーを見つけたら探索状態に遷移
+	}
 }
 
 void Enemy::Find()
 {
-
+	if (isFlex) {
+		animator->Play(ENEMY_ANIM_FLEX); // 歩行アニメーション
+		isFlex = false;
+	}
+	if (!animator->IsPlaying()) {
+		state = ENEMY_STATE_CHASE;
+	}
 }
 
 void Enemy::Chase()
 {
+	animator->Play(ENEMY_ANIM_WALK);
+
+	if (distance_ <= 10.0f) {
+		state = ENEMY_STATE_ATTACK; // 攻撃状態に遷移
+	}
+
+	transform_.position_.x += dirX_ * param_.speed_;
+	transform_.position_.z += dirZ_ * param_.speed_;
+
+	transform_.rotate_.y = atan2f(dirX_, dirZ_) * (180.0f / XM_PI); // プレイヤーの方向を向く
+
+	if (!CanSeePlayer()) {
+		state = ENEMY_STATE_IDLE; // プレイヤーが見えなくなったら待機状態に遷移
+	}
 }
 
 void Enemy::Attack()
 {
+	if(!isAttackSelect){
+		attackID_ = rand() % 3; // 0, 1, 2のランダムな値を生成
+
+		switch(attackID_){
+			case 0:
+				animator->Play(ENEMY_ANIM_JATTACK); // 攻撃アニメーション1
+				break;
+			case 1:
+				animator->Play(ENEMY_ANIM_ROAR); // 攻撃アニメーション2
+				break;
+			case 2:
+				animator->Play(ENEMY_ANIM_SWIP); // 攻撃アニメーション3
+				break;
+		}
+		isAttackSelect = true;
+	}
+
+	if (!animator->IsPlaying()) {
+		isAttack = false; // 攻撃終了
+		state = ENEMY_STATE_COOLDOWN; // クールダウン状態に遷移
+	}
 }
 
 void Enemy::Cooldown()
@@ -110,7 +197,7 @@ void Enemy::Cooldown()
 	const float cooldownDuration = 2.0f; // クールダウン時間（秒）
 	if (timer_ >= cooldownDuration) {
 		timer_ = 0; // タイマーをリセット
-		state = ENEMY_STATE_FIND; // 再びプレイヤーを探す状態に遷移
+		state = ENEMY_STATE_CHASE; // 再びプレイヤーを探す状態に遷移
 	}
 }
 
