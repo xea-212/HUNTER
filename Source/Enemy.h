@@ -1,6 +1,7 @@
 #pragma once
 #include "../Engine/GameObject.h"
 #include "Animator.h"
+#include "EnemyBullet.h"
 
 enum EnemyState
 {
@@ -9,7 +10,8 @@ enum EnemyState
 	ENEMY_STATE_CHASE,
 	ENEMY_STATE_ATTACK,
 	ENEMY_STATE_COOLDOWN,
-	ENEMY_STATE_DAMAGE
+	ENEMY_STATE_DAMAGE,
+	ENEMY_STATE_SEARCH,
 };
 
 enum EnemyAnimID
@@ -48,6 +50,9 @@ public:
 	void Attack();
 	void Cooldown();
 	void Damage();
+
+	void SetSearchPos();
+	void Search();
 private:
 	int hModel_;
 
@@ -57,7 +62,12 @@ private:
 	float dirZ_;
 	float distance_;
 
-	float timer_; // クールダウン時間を管理する変数
+	float attacktimer_;
+	float chasetimer_;
+	float cooltimer_; // クールダウン時間を管理する変数
+
+	bool isFlex_;
+	float flextimer_;
 
 	EnemyState state;
 
@@ -71,13 +81,19 @@ private:
 	};
 	EnemyParam param_;
 
+	int maxHP_;
+
 	Animator* animator;
+
+	EnemyBullet* eBullet;
 
 	Transform pPos; // プレイヤーの位置を保存する変数
 
 	int attackID_; // 攻撃アニメーションのID
 	bool isAttack; // 攻撃中かどうかのフラグ
 	bool isAttackSelect;
+	bool isShot; // 弾を撃ったかどうかのフラグ
 
-	bool isFlex; 
+	XMFLOAT3 searchPos_;
+	float searchTimer_;
 };

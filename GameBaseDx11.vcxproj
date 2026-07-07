@@ -133,6 +133,7 @@
     <ClCompile Include="Engine\CsvReader.cpp" />
     <ClCompile Include="Engine\Debug.cpp" />
     <ClCompile Include="Engine\Direct3D.cpp" />
+    <ClCompile Include="Engine\Effect.cpp" />
     <ClCompile Include="Engine\Fbx.cpp" />
     <ClCompile Include="Engine\FbxParts.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="Engine\Transform.cpp" />
     <ClCompile Include="Source\Animator.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
+    <ClCompile Include="Source\EnemyBullet.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\PlayScene.cpp" />
     <ClCompile Include="Source\UI.cpp" />
@@ -169,6 +171,7 @@
     <ClInclude Include="Engine\CsvReader.h" />
     <ClInclude Include="Engine\Debug.h" />
     <ClInclude Include="Engine\Direct3D.h" />
+    <ClInclude Include="Engine\Effect.h" />
     <ClInclude Include="Engine\Fbx.h" />
     <ClInclude Include="Engine\FbxParts.h" />
     <ClInclude Include="Engine\GameObject.h" />
@@ -186,7 +189,9 @@
     <ClInclude Include="Engine\Texture.h" />
     <ClInclude Include="Engine\Transform.h" />
     <ClInclude Include="Source\Animator.h" />
+    <ClInclude Include="Source\BoneName.h" />
     <ClInclude Include="Source\Enemy.h" />
+    <ClInclude Include="Source\EnemyBullet.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\PlayScene.h" />
     <ClInclude Include="Source\UI.h" />

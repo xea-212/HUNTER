@@ -143,6 +143,12 @@
     <ClCompile Include="Source\UI.cpp">
       <Filter>04UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\EnemyBullet.cpp">
+      <Filter>03Scene\Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Effect.cpp">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -246,6 +252,15 @@
     </ClInclude>
     <ClInclude Include="Source\UI.h">
       <Filter>04UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EnemyBullet.h">
+      <Filter>03Scene\Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BoneName.h">
+      <Filter>03Scene\Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Effect.h">
+      <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

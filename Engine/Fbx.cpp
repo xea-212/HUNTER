@@ -4,7 +4,7 @@
 
 
 
-Fbx::Fbx():_animSpeed(0)
+Fbx::Fbx():_animSpeed(0), currentFrame_(0.0f)
 {
 }
 
@@ -122,15 +122,23 @@ void Fbx::Release()
 
 }
 
+void Fbx::SetCurrentFrame(float frame)
+{
+	currentFrame_ = frame;
+}
+
 XMFLOAT3 Fbx::GetBonePosition(std::string boneName)
 {
 	XMFLOAT3 position = XMFLOAT3(0, 0, 0);
+
+	FbxTime time;
+	time.SetFrame(currentFrame_, _frameRate);
+
 	for (int i = 0; i < parts_.size(); i++)
 	{
-		if (parts_[i]->GetBonePosition(boneName, &position))
+		if (parts_[i]->GetBonePosition(boneName, &position, time))
 			break;
 	}
-
 
 	return position;
 }
@@ -163,8 +171,10 @@ void Fbx::Draw(Transform& transform, int frame)
 
 void Fbx::Draw(Transform& transform, Fbx* animFbx, float animationFrame)
 {
+	currentFrame_ = animationFrame;
+
 	FbxTime time;
-	time.SetFrame(animationFrame, _frameRate);
+	time.SetFrame(currentFrame_, _frameRate);
 
 	for (int i = 0; i < parts_.size(); i++)
 	{

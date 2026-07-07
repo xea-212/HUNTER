@@ -60,10 +60,10 @@ void Sprite::InitVertex()
 	// 頂点データ宣言
 	VERTEX vertices[] =
 	{
-		{ XMFLOAT3(-1.0f,  1.0f, 0.0f),	XMFLOAT3(0.0f, 0.0f, 0.0f) },   // 四角形の頂点（左上）
-		{ XMFLOAT3( 1.0f,  1.0f, 0.0f),	XMFLOAT3(1.0f, 0.0f, 0.0f) },   // 四角形の頂点（右上）
-		{ XMFLOAT3(-1.0f, -1.0f, 0.0f),	XMFLOAT3(0.0f, 1.0f, 0.0f) },   // 四角形の頂点（左下）
-		{ XMFLOAT3( 1.0f, -1.0f, 0.0f),	XMFLOAT3(1.0f, 1.0f, 0.0f) },   // 四角形の頂点（右下）
+		{ XMFLOAT3(-1.0f,  1.0f, 0.0f),	XMFLOAT2(0.0f, 0.0f) },   // 四角形の頂点（左上）
+		{ XMFLOAT3( 1.0f,  1.0f, 0.0f),	XMFLOAT2(1.0f, 0.0f) },   // 四角形の頂点（右上）
+		{ XMFLOAT3(-1.0f, -1.0f, 0.0f),	XMFLOAT2(0.0f, 1.0f) },   // 四角形の頂点（左下）
+		{ XMFLOAT3( 1.0f, -1.0f, 0.0f),	XMFLOAT2(1.0f, 1.0f) },   // 四角形の頂点（右下）
 	};
 
 
@@ -88,7 +88,7 @@ void Sprite::InitIndex()
 	D3D11_BUFFER_DESC   bd;
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.ByteWidth = sizeof(index);
-	bd.BindFlags = D3D10_BIND_INDEX_BUFFER;
+	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 	bd.MiscFlags = 0;
 
@@ -124,7 +124,10 @@ void Sprite::Draw(Transform& transform, RECT rect, float alpha)
 
 
 	//表示するサイズに合わせる
-	XMMATRIX cut = XMMatrixScaling((float)rect.right, (float)rect.bottom ,1);
+	float width = rect.right - rect.left;
+	float height = rect.bottom - rect.top;
+
+	XMMATRIX cut = XMMatrixScaling(width, height ,1);
 
 	//画面に合わせる
 	XMMATRIX view = XMMatrixScaling(1.0f / Direct3D::screenWidth_, 1.0f / Direct3D::screenHeight_, 1.0f);
@@ -136,8 +139,8 @@ void Sprite::Draw(Transform& transform, RECT rect, float alpha)
 	// テクスチャ座標変換行列を渡す
 	XMMATRIX mTexTrans = XMMatrixTranslation((float)rect.left / (float)pTexture_->GetSize().x,
 		(float)rect.top / (float)pTexture_->GetSize().y, 0.0f);
-	XMMATRIX mTexScale = XMMatrixScaling((float)rect.right / (float)pTexture_->GetSize().x,
-		(float)rect.bottom / (float)pTexture_->GetSize().y, 1.0f);
+	XMMATRIX mTexScale = XMMatrixScaling(width / (float)pTexture_->GetSize().x,
+		height / (float)pTexture_->GetSize().y, 1.0f);
 	XMMATRIX mTexel = mTexScale * mTexTrans;
 	cb.uvTrans = XMMatrixTranspose(mTexel);
 	

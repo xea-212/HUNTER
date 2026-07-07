@@ -53,7 +53,7 @@ HRESULT FbxParts::Init(FbxNode *pNode)
 	FbxMesh* mesh = pNode->GetMesh();
 
 	//各情報の個数を取得
-	vertexCount_ = mesh->GetControlPointsCount();			//頂点の数
+	vertexCount_ = mesh->GetPolygonVertexCount();			//頂点の数
 	polygonCount_ = mesh->GetPolygonCount();				//ポリゴンの数
 	polygonVertexCount_ = mesh->GetPolygonVertexCount();	//ポリゴン頂点インデックス数 
 
@@ -113,7 +113,8 @@ void FbxParts::InitVertex(fbxsdk::FbxMesh * mesh)
 
 	// 頂点データ用バッファの設定
 	D3D11_BUFFER_DESC bd_vertex;
-	bd_vertex.ByteWidth = sizeof(VERTEX) * mesh->GetControlPointsCount();
+	//bd_vertex.ByteWidth = sizeof(VERTEX) * mesh->GetControlPointsCount();
+	bd_vertex.ByteWidth = sizeof(VERTEX) * mesh->GetPolygonVertexCount();
 	bd_vertex.Usage = D3D11_USAGE_DYNAMIC;
 	bd_vertex.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd_vertex.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -624,7 +625,7 @@ void FbxParts::DrawMeshAnime(Transform& transform, FbxTime time, FbxScene * scen
 	Draw(transform);
 }
 
-bool FbxParts::GetBonePosition(std::string boneName, XMFLOAT3 * position)
+bool FbxParts::GetBonePosition(std::string boneName, XMFLOAT3 * position, FbxTime fbx)
 {
 	for (int i = 0; i < numBone_; i++)
 	{

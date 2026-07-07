@@ -51,7 +51,7 @@ class Fbx
 	int _startFrame, _endFrame;
 
 
-
+	float currentFrame_;
 
 
 	//ノードの中身を調べる
@@ -78,6 +78,8 @@ public:
 
 	//解放
 	void    Release();
+
+	void SetCurrentFrame(float frame);
 
 	//任意のボーンの位置を取得
 	//引数：boneName	取得したいボーンの位置
