@@ -39,6 +39,9 @@
     <Filter Include="04UI">
       <UniqueIdentifier>{1b81cb55-0e89-4067-8589-55d2373f83a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05Roading">
+      <UniqueIdentifier>{5888e98c-1cbf-4da0-bd78-a15974eaff42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">

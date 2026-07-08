@@ -267,7 +267,6 @@ void Enemy::Search()
 	// 目的地に着いた、または5秒経過したら新しい目的地を決める
 	if (dist < 1.0f || searchTimer_ > 5.0f)
 	{
-		searchTimer_ = 0.0f;
 		SetSearchPos();
 		return;
 	}
