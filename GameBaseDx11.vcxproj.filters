@@ -152,6 +152,9 @@
     <ClCompile Include="Engine\Effect.cpp">
       <Filter>01Engine\ResourceManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Roading.cpp">
+      <Filter>05Roading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -264,6 +267,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Effect.h">
       <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Roading.h">
+      <Filter>05Roading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -155,6 +155,7 @@
     <ClCompile Include="Source\EnemyBullet.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\PlayScene.cpp" />
+    <ClCompile Include="Source\Roading.cpp" />
     <ClCompile Include="Source\UI.cpp" />
     <ClCompile Include="Source\ResultScene.cpp" />
     <ClCompile Include="Source\Sky.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="Source\EnemyBullet.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\PlayScene.h" />
+    <ClInclude Include="Source\Roading.h" />
     <ClInclude Include="Source\UI.h" />
     <ClInclude Include="Source\ResultScene.h" />
     <ClInclude Include="Source\Sky.h" />
