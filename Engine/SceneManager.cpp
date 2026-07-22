@@ -3,7 +3,7 @@
 #include "../Source/TitleScene.h"
 #include "../Source/PlayScene.h"
 #include "../Source/ResultScene.h"
-#include "../Source/Roading.h"
+#include "../Source/Loading.h"
 #include "Model.h"
 #include "Image.h"
 #include "Audio.h"
@@ -27,6 +27,7 @@ void SceneManager::Initialize()
 //更新
 void SceneManager::Update()
 {
+	                                                                                             
 	//次のシーンが現在のシーンと違う　＝　シーンを切り替えなければならない
 	if (currentSceneID_ != nextSceneID_)
 	{
@@ -34,9 +35,9 @@ void SceneManager::Update()
 		KillAllChildren();
 
 		//ロードしたデータを全削除
-		Audio::Release();
+		/*Audio::Release();
 		Model::AllRelease();
-		Image::AllRelease();
+		Image::AllRelease();*/
 
 		//次のシーンを作成
 		switch (nextSceneID_)
@@ -44,7 +45,7 @@ void SceneManager::Update()
 		case SCENE_ID_TITLE:  Instantiate<TitleScene>(this); break;
 		case SCENE_ID_PLAY:   Instantiate<PlayScene>(this); break;
 		case SCENE_ID_RESULT: Instantiate<ResultScene>(this); break;
-		case SCENE_ID_ROADING: Instantiate<Roading>(this); break;
+		case SCENE_ID_Loading: Instantiate<Loading>(this); break;
 		}
 		Audio::Initialize();
 		currentSceneID_ = nextSceneID_;

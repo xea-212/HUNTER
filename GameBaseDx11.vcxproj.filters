@@ -39,7 +39,7 @@
     <Filter Include="04UI">
       <UniqueIdentifier>{1b81cb55-0e89-4067-8589-55d2373f83a9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05Roading">
+    <Filter Include="05Loading">
       <UniqueIdentifier>{5888e98c-1cbf-4da0-bd78-a15974eaff42}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -152,8 +152,8 @@
     <ClCompile Include="Engine\Effect.cpp">
       <Filter>01Engine\ResourceManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Roading.cpp">
-      <Filter>05Roading</Filter>
+    <ClCompile Include="Source\Loading.cpp">
+      <Filter>05Loading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -268,8 +268,8 @@
     <ClInclude Include="Engine\Effect.h">
       <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Roading.h">
-      <Filter>05Roading</Filter>
+    <ClInclude Include="Source\Loading.h">
+      <Filter>05Loading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

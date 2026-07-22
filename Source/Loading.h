@@ -1,16 +1,16 @@
 #pragma once
 #include "../Engine/GameObject.h"
 
-class Roading : public GameObject
+class Loading : public GameObject
 {
 public:
-	Roading();
-	~Roading();
+	Loading();
+	~Loading();
 
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
 	void Release() override;
 private:
-
+	bool isLoadEnd_;
 };

@@ -21,7 +21,7 @@ void TitleScene::Update()
 	if (Input::IsKeyDown(DIK_RETURN))
 	{
 		SceneManager* sceneManager = (SceneManager*)GetParent();
-		sceneManager->ChangeScene(SCENE_ID::SCENE_ID_PLAY);
+		sceneManager->ChangeScene(SCENE_ID::SCENE_ID_LOADING);
 	}
 }
 
